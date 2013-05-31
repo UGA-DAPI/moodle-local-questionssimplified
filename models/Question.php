@@ -36,5 +36,19 @@ class Question
 
         return $q;
     }
+
+    /**
+     * Create several Questions from a HTML string.
+     *
+     * @param string $html
+     * @return Question[]
+     */
+    public static function createMultiFromHtml($html)
+    {
+        // TODO
+        $split = array($html);
+
+        return array_map(array(self, 'createFromHtml'), $split);
+    }
 }
 
