@@ -10,6 +10,9 @@ namespace sqc;
 
 class Answer
 {
+	/** @var integer */
+	private $id;
+
 	/** @var string */
 	public $content;
 
