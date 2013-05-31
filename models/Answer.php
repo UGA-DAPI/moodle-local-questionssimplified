@@ -10,14 +10,14 @@ namespace sqc;
 
 class Answer
 {
-	/** @var integer */
-	private $id;
+    /** @var integer */
+    private $id;
 
-	/** @var string */
-	public $content;
+    /** @var string */
+    public $content;
 
-	/** @var boolean */
-	public $correct;
+    /** @var boolean */
+    public $correct;
 }
 
 

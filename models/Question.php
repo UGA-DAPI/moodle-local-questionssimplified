@@ -10,31 +10,31 @@ namespace sqc;
 
 class Question
 {
-	/** @var integer */
-	private $id;
+    /** @var integer */
+    private $id;
 
-	/** @var string */
-	public $title;
+    /** @var string */
+    public $title;
 
-	/** @var string */
-	public $description;
+    /** @var string */
+    public $description;
 
-	/** @var Answer[] */
-	public $answers;
+    /** @var Answer[] */
+    public $answers;
 
-	/**
-	 * Create a new Question from a HTML string.
-	 *
-	 * @param string $html
-	 * @return Question
-	 */
-	public static function createFromHtml($html)
-	{
-		$q = new self;
+    /**
+     * Create a new Question from a HTML string.
+     *
+     * @param string $html
+     * @return Question
+     */
+    public static function createFromHtml($html)
+    {
+        $q = new self;
 
-		// TODO
+        // TODO
 
-		return $q;
-	}
+        return $q;
+    }
 }
 
