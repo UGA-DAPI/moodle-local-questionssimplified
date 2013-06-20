@@ -27,9 +27,13 @@ $url = new moodle_url('/local/questionssimplified/edit_wysiwig.php');
 $PAGE->set_url($url);
 
 $context = context_course::instance($course->id);
-$PAGE->set_title(get_string('wysiwygEdit', 'questionssimplified'));
+$PAGE->set_context($context);
+$PAGE->set_title(get_string('wysiwygEdit', 'local_questionssimplified'));
 $PAGE->set_heading($COURSE->fullname);
 echo $OUTPUT->header();
 
+$form = new questionssimplified_wysiwyg_form();
+
+$form->display();
 
 echo $OUTPUT->footer();

@@ -6,7 +6,7 @@ if (!defined('MOODLE_INTERNAL')) {
 
 require_once($CFG->libdir.'/formslib.php');
 
-class mod_forum_post_form extends moodleform {
+class questionssimplified_wysiwyg_form extends moodleform {
     /**
      * Returns the options array to use in forum text editor
      *
@@ -14,6 +14,7 @@ class mod_forum_post_form extends moodleform {
      */
     public static function editor_options() {
         return array(
+            'noclean' => true,
         );
     }
 
@@ -21,13 +22,13 @@ class mod_forum_post_form extends moodleform {
         global $CFG;
         $mform = $this->_form;
 
-        $mform->addElement('header', 'general', get_string('wysiwygHeader', 'questionssimplified'));
+        $mform->addElement('header', 'general', get_string('wysiwygHeader', 'local_questionssimplified'));
 
-        $mform->addElement('editor', 'question', get_string('question'), null, self::editor_options());
-        $mform->setType('message', PARAM_RAW);
-        $mform->addRule('message', get_string('required'), 'required', null, 'client');
+        $mform->addElement('editor', 'questions', get_string('questions', 'question'), null, self::editor_options());
+        $mform->setType('questions', PARAM_RAW);
+        $mform->addRule('questions', get_string('required'), 'required', null, 'client');
 
-        $this->add_action_buttons(false, $submit_string);
+        $this->add_action_buttons(false, get_string('submit'));
 
         $mform->addElement('hidden', 'course');
         $mform->setType('course', PARAM_INT);
