@@ -65,6 +65,32 @@ class questionssimplified_standard_form extends moodleform {
         $mform->setType('course', PARAM_INT);
     }
 
+    /**
+     * Called by moodleform_mod::set_data() as a pre-hook.
+     *
+     * @global moodle_database $DB
+     * @param array $default_values
+     */
+    function data_preprocessing(&$default_values){
+        if (empty($this->_customdata)) {
+            return;
+        }
+        foreach ($this->_customdata as $i => $question) {
+            /* @var $question \sqc\Question */
+            $default_values["question[$i][title]"] = $question->title;
+            $default_values["question[$i][introeditor]"] = array(
+                    "text" => $question->intro,
+                    "format" => $question->introformat,
+            );
+            foreach ($question->answers as $answer) {
+                /* @var $answer \sqc\Answer */
+                $default_values["question[$i][answer][id]"] = $answer->id;
+                $default_values["question[$i][answer][content]"] = $answer->content;
+                $default_values["question[$i][answer][correct]"] = $answer->correct;
+            }
+        }
+    }
+
     function validation($data, $files) {
         $errors = parent::validation($data, $files);
         /**
@@ -73,6 +99,13 @@ class questionssimplified_standard_form extends moodleform {
         return $errors;
     }
 
+    /**
+     * Insert the elements into the form at a given rank.
+     *
+     * @param array $elements
+     * @param integer $rank
+     * @param array $replacements
+     */
     protected function repeatElements($elements, $rank, array $replacements=array()) {
         foreach ($elements as $e) {
             $element = self::cloneRepeatedElement($e, $rank, $replacements);
@@ -81,6 +114,7 @@ class questionssimplified_standard_form extends moodleform {
     }
 
     /**
+     * Return a cloned element with values replaced.
      *
      * @param HTML_QuickForm_element $e
      * @param integer $rank
