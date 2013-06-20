@@ -11,7 +11,7 @@ namespace sqc;
 class Answer
 {
     /** @var integer */
-    private $id;
+    public $id;
 
     /** @var string */
     public $content;

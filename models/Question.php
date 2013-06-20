@@ -11,13 +11,16 @@ namespace sqc;
 class Question
 {
     /** @var integer */
-    private $id;
+    public $id;
 
     /** @var string */
     public $title;
 
     /** @var string */
-    public $description;
+    public $intro;
+
+    /** @var integer */
+    public $introformat;
 
     /** @var Answer[] */
     public $answers;
