@@ -8,6 +8,9 @@
 
 namespace sqc;
 
+/* @var $DB moodle_database */
+global $DB;
+
 class Question
 {
     /** @var integer */
@@ -52,6 +55,49 @@ class Question
         $split = array($html);
 
         return array_map(array(self, 'createFromHtml'), $split);
+    }
+
+    /**
+     * Returns a list of Question matching the list of ID.
+     *
+     * @param array $ids
+     * @return array of \sql\Question
+     */
+    public static function findAllById(array $ids)
+    {
+        global $DB;
+        $records = $DB->get_records_list('question', 'id', $ids);
+        $questions = array();
+        foreach ($records as $record) {
+            $questions[] = self::buildFromRecord($record);
+        }
+        return $questions;
+    }
+
+    /**
+     * Returns a Question instance built from a record object.
+     *
+     * If the answers are not given, they are read in the DB.
+     *
+     * @param object $record
+     * @param array (opt) $answers
+     * @return \sql\Question
+     */
+    public static function buildFromRecord(\stdClass $record, $answers=null)
+    {
+        /**
+         * @todo check that the question type is MultipleChoice.
+         */
+        $question = new self();
+        $question->id = $record->id;
+        /**
+         * @todo split the question.questiontext into title+intro
+         */
+        $question->title = '';
+        $question->intro = $record->questiontext;
+        $question->introformat = $record->questiontextformat;
+        $question->answers = Answer::findAllByQuestion($question->id);
+        return $question;
     }
 }
 

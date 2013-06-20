@@ -45,7 +45,7 @@ class questionssimplified_standard_form extends moodleform {
             if (empty($this->_customdata[$qrank])){
                 $answersNo = 3;
             } else {
-                $answersNo = count($this->_customdata[$qrank]);
+                $answersNo = count($this->_customdata[$qrank]->answers);
             }
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
                 foreach ($repeatAnswer as $e) {
@@ -63,6 +63,8 @@ class questionssimplified_standard_form extends moodleform {
 
         $mform->addElement('hidden', 'course');
         $mform->setType('course', PARAM_INT);
+
+        $this->init_values();
     }
 
     /**
@@ -71,23 +73,32 @@ class questionssimplified_standard_form extends moodleform {
      * @global moodle_database $DB
      * @param array $default_values
      */
-    function data_preprocessing(&$default_values){
+    function init_values(){
         if (empty($this->_customdata)) {
             return;
         }
-        foreach ($this->_customdata as $i => $question) {
+        $qrank = 0;
+        foreach ($this->_customdata as $question) {
             /* @var $question \sqc\Question */
-            $default_values["question[$i][title]"] = $question->title;
-            $default_values["question[$i][introeditor]"] = array(
-                    "text" => $question->intro,
-                    "format" => $question->introformat,
+            $this->_form->setDefault("question[$qrank][title]", $question->title);
+            $this->_form->setDefault(
+                    "question[$qrank][introeditor]",
+                    array(
+                        "text" => $question->intro,
+                        "format" => $question->introformat,
+                )
             );
-            foreach ($question->answers as $answer) {
-                /* @var $answer \sqc\Answer */
-                $default_values["question[$i][answer][id]"] = $answer->id;
-                $default_values["question[$i][answer][content]"] = $answer->content;
-                $default_values["question[$i][answer][correct]"] = $answer->correct;
+            if (!empty($question->answers)) {
+                $arank = 0;
+                foreach ($question->answers as $answer) {
+                    /* @var $answer \sqc\Answer */
+                    $this->_form->setDefault("question[$qrank][answer][$arank][id]", $answer->id);
+                    $this->_form->setDefault("question[$qrank][answer][$arank][content]", $answer->content);
+                    $this->_form->setDefault("question[$qrank][answer][$arank][correct]", $answer->correct);
+                    $arank++;
+                }
             }
+            $qrank++;
         }
     }
 
