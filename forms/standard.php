@@ -18,12 +18,12 @@ class questionssimplified_standard_form extends moodleform {
             $mform->createElement('header', '', get_string('question') . ' {no}'),
             $mform->createElement('hidden', 'question[{no}][id]', 0),
             $mform->createElement('text', 'question[{no}][title]', get_string('questionname', 'question'), array('size'=>'80')),
-            $mform->createElement('editor', 'question[{no}][introeditor]', get_string('description'), array('rows' => 10), array('maxfiles' => 0)),
+            $mform->createElement('editor', 'question[{no}][intro]', get_string('description'), array('rows' => 10), array('maxfiles' => 0)),
         );
         $typesQuestion = array(
             "question[{no}][id]" => PARAM_INT,
             "question[{no}][title]" => PARAM_TEXT,
-            "question[{no}][introeditor]" => PARAM_RAW,
+            "question[{no}][intro]" => PARAM_RAW,
         );
 
         $repeatAnswer = array(
@@ -61,9 +61,6 @@ class questionssimplified_standard_form extends moodleform {
         //-------------------------------------------------------------------------------
         $this->add_action_buttons(false, get_string('submit'));
 
-        $mform->addElement('hidden', 'course');
-        $mform->setType('course', PARAM_INT);
-
         $this->init_values();
     }
 
@@ -80,9 +77,10 @@ class questionssimplified_standard_form extends moodleform {
         $qrank = 0;
         foreach ($this->_customdata as $question) {
             /* @var $question \sqc\Question */
+            $this->_form->setDefault("question[$qrank][id]", $question->id);
             $this->_form->setDefault("question[$qrank][title]", $question->title);
             $this->_form->setDefault(
-                    "question[$qrank][introeditor]",
+                    "question[$qrank][intro]",
                     array(
                         "text" => $question->intro,
                         "format" => $question->introformat,
