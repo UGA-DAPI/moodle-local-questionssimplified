@@ -14,16 +14,28 @@ class questionssimplified_standard_form extends moodleform {
         $mform->addElement('header', 'general', get_string('standardHeader', 'local_questionssimplified'));
 
         //-------------------------------------------------------------------------------
-        $repeatQuestion = array();
-        $repeatQuestion[] = $mform->createElement('header', '', get_string('question') . ' {no}');
-        $repeatQuestion[] = $mform->createElement('hidden', 'question[{no}][id]', 0);
-        $repeatQuestion[] = $mform->createElement('text', 'question[{no}][title]', get_string('questionname', 'question'), array('size'=>'80'));
-        $repeatQuestion[] = $mform->createElement('editor', 'question[{no}][introeditor]', get_string('description'), array('rows' => 10), array('maxfiles' => 0));
+        $repeatQuestion = array(
+            $mform->createElement('header', '', get_string('question') . ' {no}'),
+            $mform->createElement('hidden', 'question[{no}][id]', 0),
+            $mform->createElement('text', 'question[{no}][title]', get_string('questionname', 'question'), array('size'=>'80')),
+            $mform->createElement('editor', 'question[{no}][introeditor]', get_string('description'), array('rows' => 10), array('maxfiles' => 0)),
+        );
+        $typesQuestion = array(
+            "question[{no}][id]" => PARAM_INT,
+            "question[{no}][title]" => PARAM_TEXT,
+            "question[{no}][introeditor]" => PARAM_RAW,
+        );
 
-        $repeatAnswer = array();
-        $repeatAnswer[] = $mform->createElement('hidden', 'question[{qrank}][answer][{no}][id]', 0);
-        $repeatAnswer[] = $mform->createElement('text', 'question[{qrank}][answer][{no}][content]', get_string('answer', 'question') . ' {no}', array('size'=>'80'));
-        $repeatAnswer[] = $mform->createElement('checkbox', 'question[{qrank}][answer][{no}][correct]', get_string('rightanswer', 'question') . ' {no}');
+        $repeatAnswer = array(
+            $mform->createElement('hidden', 'question[{qrank}][answer][{no}][id]', 0),
+            $mform->createElement('text', 'question[{qrank}][answer][{no}][content]', get_string('answer', 'question') . ' {no}', array('size'=>'80')),
+            $mform->createElement('checkbox', 'question[{qrank}][answer][{no}][correct]', get_string('rightanswer', 'question') . ' {no}'),
+        );
+        $typesAnswer = array(
+            "question[{qrank}][answer][{no}][id]" => PARAM_INT,
+            "question[{qrank}][answer][{no}][content]" => PARAM_TEXT,
+            "question[{qrank}][answer][{no}][correct]" => PARAM_RAW,
+        );
 
         if ($this->_customdata){
             $repeatNo = count($this->_customdata);
@@ -34,10 +46,7 @@ class questionssimplified_standard_form extends moodleform {
         //$this->repeat_elements($repeatQuestion, $repeatNo, array(), 'question_repeats', 'question_add_fields', 1);
 
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
-            $this->repeatElements($repeatQuestion, $qrank);
-            $mform->setType("question[$qrank][id]", PARAM_INT);
-            $mform->setType("question[$qrank][title]", PARAM_TEXT);
-            $mform->setType("question[$qrank][introeditor]", PARAM_RAW);
+            $this->repeatElements($repeatQuestion, $typesQuestion, $qrank);
 
             if (empty($this->_customdata[$qrank])){
                 $answersNo = 3; // empty answers if none are given
@@ -45,10 +54,7 @@ class questionssimplified_standard_form extends moodleform {
                 $answersNo = count($this->_customdata[$qrank]->answers);
             }
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
-                $this->repeatElements($repeatAnswer, $arank, array('{qrank}' => $qrank));
-                $mform->setType("question[$qrank][answer][$arank][id]", PARAM_INT);
-                $mform->setType("question[$qrank][answer][$arank][content]", PARAM_TEXT);
-                $mform->setType("question[$qrank][answer][$arank][correct]", PARAM_RAW);
+                $this->repeatElements($repeatAnswer, $typesAnswer, $arank, array('{qrank}' => $qrank));
             }
         }
 
@@ -108,13 +114,21 @@ class questionssimplified_standard_form extends moodleform {
      * Insert the elements into the form at a given rank.
      *
      * @param array $elements
+     * @param array $types assoc: elementName => type
      * @param integer $rank
-     * @param array $replacements
+     * @param array (opt) $replacements
      */
-    protected function repeatElements($elements, $rank, array $replacements=array()) {
+    protected function repeatElements($elements, $types, $rank, array $replacements=array()) {
+        $replacements['{no}'] = $rank;
         foreach ($elements as $e) {
             $element = self::cloneRepeatedElement($e, $rank, $replacements);
             $this->_form->addElement($element);
+        }
+        foreach ($types as $name => $type) {
+            $this->_form->setType(
+                    str_replace(array_keys($replacements), array_values($replacements), $name),
+                    $type
+            );
         }
     }
 
@@ -122,12 +136,9 @@ class questionssimplified_standard_form extends moodleform {
      * Return a cloned element with values replaced.
      *
      * @param HTML_QuickForm_element $e
-     * @param integer $rank
-     * @param array $replacements
      * @return HTML_QuickForm_element
      */
-    private static function cloneRepeatedElement($e, $rank, array $replacements=array()) {
-        $replacements['{no}'] = $rank;
+    private static function cloneRepeatedElement($e, $rank, array $replacements) {
         $element = fullclone($e);
         $name = str_replace(array_keys($replacements), array_values($replacements), $element->getName());
         // display
