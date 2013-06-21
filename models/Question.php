@@ -58,6 +58,31 @@ class Question
     }
 
     /**
+     * Sets the attributes (including answers) of the instance.
+     *
+     * @param array $attr
+     */
+    public function setAttributes(array $attr) {
+        if (isset($attr['id'])) {
+            $this->id = $attr['id'];
+        } else {
+            $this->id = null;
+        }
+        $this->title = $attr['title'];
+        $this->intro = $attr['intro']['text'];
+        $this->introformat = $attr['intro']['format'];
+        $this->intro = $attr['intro'];
+        if (!empty($attr['answer'])) {
+            foreach ($attr['answer'] as $a) {
+                $answer = Answer::buildFromArray($a);
+                if ($answer) {
+                    $this->answers[] = $answer;
+                }
+            }
+        }
+    }
+
+    /**
      * Returns a list of Question matching the list of ID.
      *
      * @param array $ids
@@ -97,6 +122,19 @@ class Question
         $question->intro = $record->questiontext;
         $question->introformat = $record->questiontextformat;
         $question->answers = Answer::findAllByQuestion($question->id);
+        return $question;
+    }
+
+    /**
+     * Returns a Question instance built from a record array (form).
+     *
+     * @param array $record
+     * @return \sql\Question
+     */
+    public static function buildFromArray(array $record)
+    {
+        $question = new self();
+        $question->setAttributes($record);
         return $question;
     }
 }

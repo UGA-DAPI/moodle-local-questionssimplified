@@ -33,7 +33,7 @@ class Answer
     }
 
     /**
-     * Returns a Answerinstance built from a record object.
+     * Returns a Answer instance built from a record object.
      *
      * @param object $record
      * @return \sql\Answer
@@ -50,6 +50,28 @@ class Answer
          */
         $answer->content = $record->answer;
         $answer->correct = $record->fraction == 0 ? false : true;
+        return $answer;
+    }
+
+    /**
+     * Returns a Answer instance built from an array (form).
+     *
+     * @param array $record
+     * @return \sql\Answer
+     */
+    public static function buildFromArray(array $record)
+    {
+        if (empty($record['content'])) {
+            return null;
+        }
+        $answer = new self();
+        if (isset($record['id'])) {
+            $answer->id = $record['id'];
+        } else {
+            $answer->id = null;
+        }
+        $answer->content = $record['content'];
+        $answer->correct = !empty($record['correct']);
         return $answer;
     }
 }
