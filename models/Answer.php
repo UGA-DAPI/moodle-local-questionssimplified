@@ -49,7 +49,7 @@ class Answer
          * @todo convert formated text into raw text
          */
         $answer->content = $record->answer;
-        $answer->correct = $record->fraction == 1 ? true : false;
+        $answer->correct = $record->fraction == 0 ? false : true;
         return $answer;
     }
 }
