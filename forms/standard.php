@@ -26,7 +26,7 @@ class questionssimplified_standard_form extends moodleform {
         $repeatAnswer[] = $mform->createElement('checkbox', 'question[{qrank}][answer][{no}][correct]', get_string('rightanswer', 'question') . ' {no}');
 
         if ($this->_customdata){
-            $repeatNo = 1 + count($this->_customdata);
+            $repeatNo = count($this->_customdata);
         } else {
             $repeatNo = 2;
         }
@@ -34,24 +34,18 @@ class questionssimplified_standard_form extends moodleform {
         //$this->repeat_elements($repeatQuestion, $repeatNo, array(), 'question_repeats', 'question_add_fields', 1);
 
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
-            foreach ($repeatQuestion as $e) {
-                $element = self::cloneRepeatedElement($e, $qrank);
-                $mform->addElement($element);
-            }
+            $this->repeatElements($repeatQuestion, $qrank);
             $mform->setType("question[$qrank][id]", PARAM_INT);
             $mform->setType("question[$qrank][title]", PARAM_TEXT);
             $mform->setType("question[$qrank][introeditor]", PARAM_RAW);
 
             if (empty($this->_customdata[$qrank])){
-                $answersNo = 3;
+                $answersNo = 3; // empty answers if none are given
             } else {
                 $answersNo = count($this->_customdata[$qrank]->answers);
             }
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
-                foreach ($repeatAnswer as $e) {
-                    $element = self::cloneRepeatedElement($e, $arank, array('{qrank}' => $qrank));
-                    $mform->addElement($element);
-                }
+                $this->repeatElements($repeatAnswer, $arank, array('{qrank}' => $qrank));
                 $mform->setType("question[$qrank][answer][$arank][id]", PARAM_INT);
                 $mform->setType("question[$qrank][answer][$arank][content]", PARAM_TEXT);
                 $mform->setType("question[$qrank][answer][$arank][correct]", PARAM_RAW);
@@ -135,13 +129,11 @@ class questionssimplified_standard_form extends moodleform {
     private static function cloneRepeatedElement($e, $rank, array $replacements=array()) {
         $replacements['{no}'] = $rank;
         $element = fullclone($e);
-        $name = $element->getName();
-        $name = str_replace(array_keys($replacements), array_values($replacements), $name);
+        $name = str_replace(array_keys($replacements), array_values($replacements), $element->getName());
         // display
         $replacements['{no}']++;
         $element->setName($name);
-        $label = $element->getLabel();
-        $label = str_replace(array_keys($replacements), array_values($replacements), $label);
+        $label = str_replace(array_keys($replacements), array_values($replacements), $element->getLabel());
         $element->setLabel($label);
         if (is_a($element, 'HTML_QuickForm_header')) {
             $element->setText(str_replace(array_keys($replacements), array_values($replacements), $element->_text));
