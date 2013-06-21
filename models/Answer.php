@@ -9,18 +9,38 @@
 namespace sqc;
 
 global $DB;
-/* @var $DB moodle_database */
+/* @var $DB \moodle_database */
 
 class Answer
 {
     /** @var integer */
     public $id;
 
+    /** @var integer */
+    public $questionId;
+
     /** @var string */
     public $content;
 
     /** @var boolean */
     public $correct;
+
+    /**
+     * Saves the instance into the DB.
+     *
+     * @global \moodle_database $DB
+     * @return boolean Success?
+     */
+    public function save() {
+        global $DB;
+        $record = $this->convertToDbRecord();
+        if ($record->id) {
+            $this->id = $DB->update_record('question_answers', $record);
+        } else {
+            $this->id = $DB->insert_record('question_answers', $record);
+        }
+        return (boolean) $this->id;
+    }
 
     public static function findAllByQuestion($qid) {
         global $DB;
@@ -45,6 +65,7 @@ class Answer
          */
         $answer = new self();
         $answer->id = $record->id;
+        $answer->questionId = $record->question;
         /**
          * @todo convert formated text into raw text
          */
@@ -70,10 +91,34 @@ class Answer
         } else {
             $answer->id = null;
         }
+        if (!empty($record['questionId'])) {
+            $answer->questionId = $record['questionId'];
+        }
         $answer->content = $record['content'];
         $answer->correct = !empty($record['correct']);
         return $answer;
     }
+
+    /**
+     * Convert an instance to a stdClass suitable for the DB table "question_answers".
+     *
+     * @return stdClass
+     */
+    protected function convertToDbRecord() {
+        $record = array(
+            'id' => $this->id,
+            'question' => $this->questionId,
+            'answer' => $this->content,
+            'answerformat' => FORMAT_PLAIN,
+            'fraction' => $this->correct ? 1 : 0, /// @todo Fix 'fraction' : set a parameter with the number of correct answers.
+            'feedback' => '',
+            'feedbackformat' => FORMAT_PLAIN,
+        );
+        if (empty($this->id)) {
+            $record['id'] = null;
+        } else {
+            $record['id'] = $this->id;
+        }
+        return (object) $record;
+    }
 }
-
-

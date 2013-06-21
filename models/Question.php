@@ -8,7 +8,7 @@
 
 namespace sqc;
 
-/* @var $DB moodle_database */
+/* @var $DB \moodle_database */
 global $DB;
 
 class Question
@@ -71,15 +71,45 @@ class Question
         $this->title = $attr['title'];
         $this->intro = $attr['intro']['text'];
         $this->introformat = $attr['intro']['format'];
-        $this->intro = $attr['intro'];
         if (!empty($attr['answer'])) {
             foreach ($attr['answer'] as $a) {
                 $answer = Answer::buildFromArray($a);
                 if ($answer) {
+                    $answer->questionId = $this->id;
                     $this->answers[] = $answer;
                 }
             }
         }
+    }
+
+    /**
+     * Saves the instance into the DB.
+     *
+     * @global \moodle_database $DB
+     * @return boolean Success?
+     */
+    public function save() {
+        global $DB, $USER;
+        $record = $this->convertToDbRecord();
+        if ($record->id) {
+            $this->id = $DB->update_record('question', $record);
+        } else {
+            $record->timecreated = $_SERVER['REQUEST_TIME'];
+            $record->createdby = $USER->id;
+            $this->id = $DB->insert_record('question', $record);
+        }
+        if (!$this->id) {
+            return false;
+        }
+        if ($this->answers) {
+            foreach ($this->answers as $answer) {
+                $answer->questionId = $this->id;
+                if (!$answer->save()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -136,6 +166,49 @@ class Question
         $question = new self();
         $question->setAttributes($record);
         return $question;
+    }
+
+    /**
+     * Returns a normalized title, as Moodle wishes it.
+     *
+     * @return string
+     */
+    protected function getNormalizedTitle() {
+        return iconv('UTF-8', 'ASCII//TRANSLIT', trim(preg_replace('/[?!.;,]/', '', $this->title)));
+    }
+
+    /**
+     * Convert an instance to a stdClass suitable for the DB table "question".
+     *
+     * @return stdClass
+     */
+    protected function convertToDbRecord() {
+        global $USER;
+        $record = array(
+            'id' => $this->id,
+            // 'category' => ,
+            // 'parent' => ,
+            'name' => $this->getNormalizedTitle(),
+            'questiontext' => $this->intro,
+            'questiontextformat' => $this->introformat,
+            'generalfeedback' => '',
+            'generalfeedbackformat' => FORMAT_PLAIN,
+            'defaultmark' => '1.0',
+            'penalty' => '1.0',
+            'qtype' => 'multichoice',
+            'length' => 1,
+            // 'stamp',
+            // 'version',
+            'hidden' => 0,
+            'timemodified' => $_SERVER['REQUEST_TIME'],
+            'modifiedby' => $USER->id,
+        );
+        if (empty($this->id)) {
+            $record['id'] = null;
+        } else {
+            $record['id'] = $this->id;
+        }
+        return (object) $record;
     }
 }
 

@@ -150,4 +150,3 @@ class questionssimplified_standard_form extends moodleform {
         return $element;
     }
 }
-

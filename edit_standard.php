@@ -10,11 +10,12 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
 require_once __DIR__ . '/forms/standard.php';
 
-global $OUTPUT, $PAGE;
+global $DB, $OUTPUT, $PAGE, $SITE;
+/* @var $DB moodle_database */
 /* @var $OUTPUT core_renderer */
 /* @var $PAGE moodle_page */
 
-$courseid  = optional_param('course', SITEID, PARAM_INT);   // course id (defaults to Site)
+$courseid  = optional_param('course', $SITE->id, PARAM_INT);   // course id (defaults to Site)
 $questionsId = optional_param('questions', '', PARAM_SEQUENCE);   // course id (defaults to Site)
 
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
@@ -43,6 +44,22 @@ $PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' -
 echo $OUTPUT->header();
 
 $form = new questionssimplified_standard_form(null, $questions);
+
+/**
+ * @todo Fix reading of posted data: some fields will be ignored as their number isn't known in the form.
+ */
+$data = $form->get_data();
+if ($data) {
+    //var_dump($data);
+    foreach ($data->question as $line) {
+        $question = \sqc\Question::buildFromArray($line);
+        if (!$question->save()) {
+            echo "ERROR saving question";
+            var_dump($question);
+        }
+    }
+    die();
+}
 
 $form->display();
 
