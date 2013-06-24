@@ -91,8 +91,11 @@ class Question
     public function save() {
         global $DB, $USER;
         $record = $this->convertToDbRecord();
+        if (!$record->name) {
+            return false;
+        }
         if ($record->id) {
-            $this->id = $DB->update_record('question', $record);
+            $DB->update_record('question', $record);
         } else {
             $record->timecreated = $_SERVER['REQUEST_TIME'];
             $record->createdby = $USER->id;
