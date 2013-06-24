@@ -29,13 +29,14 @@ class Answer
      * Saves the instance into the DB.
      *
      * @global \moodle_database $DB
+     * @var integer $divisor (opt) Number of correct answers.
      * @return boolean Success?
      */
-    public function save() {
+    public function save($divisor=1) {
         global $DB;
-        $record = $this->convertToDbRecord();
+        $record = $this->convertToDbRecord($divisor);
         if ($record->id) {
-            $this->id = $DB->update_record('question_answers', $record);
+            $DB->update_record('question_answers', $record);
         } else {
             $this->id = $DB->insert_record('question_answers', $record);
         }
@@ -102,15 +103,17 @@ class Answer
     /**
      * Convert an instance to a stdClass suitable for the DB table "question_answers".
      *
+     * @var integer $divisor (opt) Number of correct answers.
      * @return stdClass
      */
-    protected function convertToDbRecord() {
+    protected function convertToDbRecord($divisor=1)
+    {
         $record = array(
             'id' => $this->id,
             'question' => $this->questionId,
             'answer' => $this->content,
             'answerformat' => FORMAT_PLAIN,
-            'fraction' => $this->correct ? 1 : 0, /// @todo Fix 'fraction' : set a parameter with the number of correct answers.
+            'fraction' => $this->correct ? ($divisor ? 1.0/$divisor : "1.0") : 0,
             'feedback' => '',
             'feedbackformat' => FORMAT_PLAIN,
         );
