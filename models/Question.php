@@ -54,7 +54,7 @@ class Question
         // TODO
         $split = array($html);
 
-        return array_map(array(self, 'createFromHtml'), $split);
+        return array_map(array('\sqc\Question', 'createFromHtml'), $split);
     }
 
     /**
