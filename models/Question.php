@@ -124,7 +124,12 @@ class Question
         $records = $DB->get_records_list('question', 'id', $ids);
         $questions = array();
         foreach ($records as $record) {
-            $questions[] = self::buildFromRecord($record);
+            $q = self::buildFromRecord($record);
+            if ($q) {
+                $questions[] = $q;
+            } else {
+                // error
+            }
         }
         return $questions;
     }
@@ -140,9 +145,9 @@ class Question
      */
     public static function buildFromRecord(\stdClass $record, $answers=null)
     {
-        /**
-         * @todo check that the question type is MultipleChoice.
-         */
+        if ($record->qtype !== 'multichoice') {
+            return null;
+        }
         $question = new self();
         $question->id = $record->id;
         $question->title = $record->name;
