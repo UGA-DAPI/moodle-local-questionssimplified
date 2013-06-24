@@ -53,9 +53,9 @@ if ($data) {
     //var_dump($data);
     foreach ($data->question as $line) {
         $question = \sqc\Question::buildFromArray($line);
-        if (!$question->save()) {
+        if (!$question->save() && $question->title) {
             echo "ERROR saving question";
-            var_dump($question);
+            var_dump($question); /// @todo Remove var_dump from prod code
         }
     }
     die();

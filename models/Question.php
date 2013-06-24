@@ -63,13 +63,9 @@ class Question
      * @param array $attr
      */
     public function setAttributes(array $attr) {
-        if (isset($attr['id'])) {
-            $this->id = $attr['id'];
-        } else {
-            $this->id = null;
-        }
-        $this->title = $attr['title'];
-        $this->intro = $attr['intro']['text'];
+        $this->id = isset($attr['id']) ? $attr['id'] : null;
+        $this->title = isset($attr['title']) ? $attr['title'] : '';
+        $this->intro = isset($attr['intro']['text']) ? $attr['intro']['text'] : '';
         $this->introformat = $attr['intro']['format'];
         if (!empty($attr['answer'])) {
             foreach ($attr['answer'] as $a) {
