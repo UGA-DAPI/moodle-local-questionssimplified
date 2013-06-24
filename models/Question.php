@@ -105,9 +105,10 @@ class Question
             return false;
         }
         if ($this->answers) {
+            $numCorrect = $this->countCorrectAnswers();
             foreach ($this->answers as $answer) {
                 $answer->questionId = $this->id;
-                if (!$answer->save()) {
+                if (!$answer->save($numCorrect)) {
                     return false;
                 }
             }
@@ -212,6 +213,24 @@ class Question
             $record['id'] = $this->id;
         }
         return (object) $record;
+    }
+
+    /**
+     * Return the number of correct answers.
+     *
+     * @return int Num of correct answers
+     */
+    protected function countCorrectAnswers() {
+        if (empty($answers)) {
+            return 0;
+        }
+        $count = 0;
+        foreach ($this->answers as $a) {
+            if ($a->correct) {
+                $count++;
+            }
+        }
+        return $count;
     }
 }
 
