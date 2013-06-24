@@ -148,10 +148,7 @@ class Question
          */
         $question = new self();
         $question->id = $record->id;
-        /**
-         * @todo split the question.questiontext into title+intro
-         */
-        $question->title = '';
+        $question->title = $record->name;
         $question->intro = $record->questiontext;
         $question->introformat = $record->questiontextformat;
         $question->answers = Answer::findAllByQuestion($question->id);
@@ -177,7 +174,10 @@ class Question
      * @return string
      */
     protected function getNormalizedTitle() {
-        return iconv('UTF-8', 'ASCII//TRANSLIT', trim(preg_replace('/[?!.;,]/', '', $this->title)));
+        if (empty($this->title)) {
+            return '';
+        }
+        return trim(strip_tags($this->title));
     }
 
     /**
