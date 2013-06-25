@@ -108,6 +108,10 @@ class Question
                     return false;
                 }
             }
+            /**
+             * @todo Delete other answers of this question
+             * @todo Display an error when something went wrong
+             */
         }
         return true;
     }

@@ -47,7 +47,6 @@ $form = new questionssimplified_standard_form(null, $questions);
 
 $data = $form->get_data();
 if ($data) {
-    //var_dump($data);
     foreach ($data->question as $line) {
         $question = \sqc\Question::buildFromArray($line);
         if (!$question->save() && $question->title) {
