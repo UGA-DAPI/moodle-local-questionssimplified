@@ -42,8 +42,7 @@ class questionssimplified_standard_form extends moodleform {
         } else {
             $repeatNo = 2;
         }
-
-        //$this->repeat_elements($repeatQuestion, $repeatNo, array(), 'question_repeats', 'question_add_fields', 1);
+        $repeatNo = $this->initRepeat("questionsno", $repeatNo);
 
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
             $this->repeatElements($repeatQuestion, $typesQuestion, $qrank);
@@ -53,6 +52,7 @@ class questionssimplified_standard_form extends moodleform {
             } else {
                 $answersNo = count($this->_customdata[$qrank]->answers);
             }
+            $answersNo = $this->initRepeat("q{$qrank}answersno", $answersNo);
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
                 $this->repeatElements($repeatAnswer, $typesAnswer, $arank, array('{qrank}' => $qrank));
             }
@@ -106,6 +106,22 @@ class questionssimplified_standard_form extends moodleform {
          * @todo validate
          */
         return $errors;
+    }
+
+    /**
+     * Init the repeat sequence with a default number of repeats.
+     *
+     * @param string  $name HTML name of the hidden field (no [] allowed).
+     * @param integer $defaultCount
+     * @return integer Real number of repeats.
+     */
+    protected function initRepeat($name, $defaultCount)
+    {
+        $repeats = optional_param($name, $defaultCount, PARAM_INT);
+        $this->_form->addElement('hidden', $name, $repeats);
+        $this->_form->setType($name, PARAM_INT);
+        $this->_form->setConstant($name, $repeats);
+        return $repeats;
     }
 
     /**

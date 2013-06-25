@@ -45,9 +45,6 @@ echo $OUTPUT->header();
 
 $form = new questionssimplified_standard_form(null, $questions);
 
-/**
- * @todo Fix reading of posted data: some fields will be ignored as their number isn't known in the form.
- */
 $data = $form->get_data();
 if ($data) {
     //var_dump($data);
