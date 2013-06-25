@@ -44,18 +44,21 @@ class questionssimplified_standard_form extends moodleform {
         }
         $repeatNo = $this->initRepeat("questionsno", $repeatNo);
 
+        $addstring = get_string('addfields', 'form', 2);
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
             $this->repeatElements($repeatQuestion, $typesQuestion, $qrank);
 
             if (empty($this->_customdata[$qrank])){
                 $answersNo = 3; // empty answers if none are given
             } else {
-                $answersNo = count($this->_customdata[$qrank]->answers);
+                $answersNo = 1 + count($this->_customdata[$qrank]->answers);
             }
-            $answersNo = $this->initRepeat("q{$qrank}answersno", $answersNo);
+            $answersNo = $this->initRepeat("q{$qrank}answersno", $answersNo, "q{$qrank}answersadd");
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
                 $this->repeatElements($repeatAnswer, $typesAnswer, $arank, array('{qrank}' => $qrank));
             }
+            $this->_form->registerNoSubmitButton("q{$qrank}answersadd");
+            $this->_form->addElement('submit', "q{$qrank}answersadd", $addstring);
         }
 
         //-------------------------------------------------------------------------------
@@ -113,11 +116,18 @@ class questionssimplified_standard_form extends moodleform {
      *
      * @param string  $name HTML name of the hidden field (no [] allowed).
      * @param integer $defaultCount
+     * @param string $buttonName (opt) HTML name of the button that adds fields.
      * @return integer Real number of repeats.
      */
-    protected function initRepeat($name, $defaultCount)
+    protected function initRepeat($name, $defaultCount, $buttonName=null)
     {
         $repeats = optional_param($name, $defaultCount, PARAM_INT);
+        if ($buttonName) {
+            $add = optional_param($buttonName, 0, PARAM_TEXT);
+            if ($add) {
+                $repeats += 2;
+            }
+        }
         $this->_form->addElement('hidden', $name, $repeats);
         $this->_form->setType($name, PARAM_INT);
         $this->_form->setConstant($name, $repeats);
