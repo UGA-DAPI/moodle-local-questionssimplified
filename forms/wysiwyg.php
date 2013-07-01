@@ -32,6 +32,22 @@ class questionssimplified_wysiwyg_form extends moodleform {
 
         $mform->addElement('hidden', 'course');
         $mform->setType('course', PARAM_INT);
+
+        $this->init_values();
+    }
+
+    /**
+     * Called at the end of the form definition.
+     *
+     * @global moodle_database $DB
+     */
+    function init_values(){
+        if (empty($this->_customdata)) {
+            return;
+        }
+        if (!empty($this->_customdata['course'])) {
+            $this->_form->setDefault('course', $this->_customdata['course']->id);
+        }
     }
 
     function validation($data, $files) {
