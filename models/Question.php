@@ -32,7 +32,9 @@ class Question
     {
         return trim(
                 preg_replace('#<strong><br ?/?></strong>#i', '<br />',
-                    preg_replace('#<span[^>]*><br ?/?></span>#i', '<br />', $html)
+                    preg_replace('#<span[^>]*><br ?/?></span>#i', '<br />',
+                        mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8')
+                    )
                 )
         );
     }
@@ -51,7 +53,7 @@ class Question
 
         // questions are identified with DOM and removed from the HTML
         $dom = new \DOMDocument();
-        $dom->loadHTML('<div>' . mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8') . '</div>');
+        $dom->loadHTML('<div>' . $html . '</div>');
         if (is_a($dom->firstChild, 'DOMDocumentType')) {
             $dom->removeChild($dom->firstChild); // remove <!DOCTYPE
         }
@@ -99,7 +101,7 @@ class Question
         foreach ($div->childNodes as $node) {
             $html .= $dom->saveXml($node);
         }
-        $html = str_replace(array("\n", "<p/>", '<strong/>', '<span/>'), array(' ', '', '', ''), $html);
+        $html = str_replace(array("\n", "<p/>", '<strong/>', '<span/>', '&#13;'), array(' ', '', '', '', ''), $html);
         $html = preg_replace('#<p>\s*</p>\s*#', '', $html);
         $html = preg_replace('#<p>\s*<br ?/?>\s*</p>\s*#', '', $html);
 
@@ -149,8 +151,12 @@ class Question
      */
     public static function createMultiFromHtml($html)
     {
-        $split = preg_split('/(?=<p>\s*<strong>)/', $html, null, PREG_SPLIT_NO_EMPTY);
-
+        $split = preg_split(
+                '/(?=<p>\s*<strong>)/',
+                str_replace(array('<strong></strong>', '<strong/>', '<strong />'), array('', '', ''), $html),
+                null,
+                PREG_SPLIT_NO_EMPTY
+        );
         return array_map(array('\sqc\Question', 'createFromHtml'), $split);
     }
 
