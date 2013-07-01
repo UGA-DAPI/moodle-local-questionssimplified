@@ -78,6 +78,12 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
                  <span style="text-decoration: underline;">Correct1<br />
                  <span style="text-decoration: underline;">Correct2</span></span></p>'
             ),
+            array(
+                '<p><strong>Question<br /></strong>Baratin<br />long<strong><br /></strong></p>
+                 <p><span style="text-decoration: line-through;">Incorrect</span></p>
+                 <p><span style="text-decoration: line-through;"></span><span style="text-decoration: underline;">Correct1</span></p>
+                 <p><span style="text-decoration: underline;">Correct2</span></p>'
+            ),
         );
     }
 
