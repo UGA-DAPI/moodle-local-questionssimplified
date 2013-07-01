@@ -45,6 +45,10 @@ echo $OUTPUT->header();
 
 $form = new questionssimplified_standard_form(null, array('course' => $course, 'questions' => $questions));
 
+/**
+ * @todo Use the "course" param unless the question already has a courseid.
+ */
+
 $data = $form->get_data();
 if ($data) {
     foreach ($data->question as $line) {

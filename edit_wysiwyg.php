@@ -49,7 +49,7 @@ if ($data) {
     try {
         $questions = \sqc\Question::createMultiFromHtml($data->questions['text']);
     } catch (Exception $e) {
-        /// @todo Handle errors
+        /// @todo Handle errors when parsing HTML
         echo "ERROR: " . $e->getMessage();
     }
     /**
