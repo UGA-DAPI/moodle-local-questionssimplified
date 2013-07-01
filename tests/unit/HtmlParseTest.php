@@ -57,7 +57,7 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $q->answers[0]->correct);
         $this->assertEquals("Incorrect", $q->answers[0]->content);
         $this->assertEquals(true, $q->answers[2]->correct);
-        $this->assertEquals("Correct2", $q->answers[2]->content);
+        $this->assertEquals("Correct2", strip_tags($q->answers[2]->content));
     }
 
     /**

@@ -49,15 +49,26 @@ class Question
         $q->answers = array();
         $html = self::cleanupHtml($html);
 
+        // questions are identified with DOM and removed from the HTML
         $dom = new \DOMDocument();
         $dom->loadHTML('<div>' . $html . '</div>');
-        $dom->removeChild($dom->firstChild); // remove <!DOCTYPE
+        if (is_a($dom->firstChild, 'DOMDocumentType')) {
+            $dom->removeChild($dom->firstChild); // remove <!DOCTYPE
+        }
         $spans = $dom->getElementsByTagName('span');
         $spansToDelete = array();
         foreach ($spans as $span) {
             if ($span->attributes->getNamedItem("style")) {
-                $style = $span->attributes->getNamedItem("style")->nodeValue;
+                $style = $span->getAttribute("style");
                 if (preg_match('/\b(line-through|underline)\b/', $style, $m)) {
+                    // remove embedded spans of same type
+                    foreach ($span->childNodes as $node) {
+                        if ($node->nodeName === 'span' && strpos($node->getAttribute("style"), $m[1]) !== false) {
+                            // contains a similar span that should be removed
+                            $node->removeAttribute("style");
+                        }
+                    }
+                    // at least one new answer, more if <br> is used
                     $a = new Answer();
                     $a->correct = $m[1] === 'underline' ? true : false;
                     foreach ($span->childNodes as $node) {
@@ -79,14 +90,20 @@ class Question
                 }
             }
         }
-        // cannot update dom while reading, a second loop is necessary
+        // cannot remove dom nodes while reading, a second loop is necessary
         foreach ($spansToDelete as $span) {
             $span->parentNode->removeChild($span);
         }
-        //echo "\n**********\n$html";
-        $html = $dom->saveXml($dom->firstChild->firstChild->firstChild->firstChild);
-        //echo "\n***********\n$html\n***********\n"; print_r($q->answers);
+        $html = '';
+        $div = $dom->firstChild->firstChild->firstChild; // down to the surrounding div
+        foreach ($div->childNodes as $node) {
+            $html .= $dom->saveXml($node);
+        }
+        $html = str_replace(array("\n", "<p/>"), array(' ', ''), $html);
+        $html = preg_replace('#<p>\s*</p>\s*#', '', $html);
+        $html = preg_replace('#<p>\s*<br ?/?>\s*</p>\s*#', '', $html);
 
+        // DOM isn't suitable for title and intro, so regexp are used
         if (preg_match('#^\s*<p>\s*<strong>(.+?)</strong>\s*</p>#i', $html, $m)) {
             $strong = $m[1];
             if (stripos($strong, '<p>') === false) {
@@ -106,7 +123,6 @@ class Question
                 $html = str_replace($m[0], '<p>', $html);
             } else if (preg_match('#^\s*<p>\s*<strong>(.+?)<br ?/?>\s*</strong>#i', $html, $m)) {
                 $q->title = $m[1];
-                echo $m[0];
                 $html = str_replace($m[0], '<p>', $html);
             } else {
                 throw new \Exception("Invalid format of HTML");
@@ -115,7 +131,7 @@ class Question
 
         if (preg_match('/^\s*<p>/s', $html)) {
             $q->intro = trim(preg_replace('#<br ?/?>\s*</p>\s*$#s', '</p>', $html));
-        } else if (preg_match('/^\s*$/s', $html)) {
+        } else if (preg_match('/^\s*$/', $html)) {
             $q->intro = '';
         } else {
             $q->intro = '<p>' . trim(preg_replace('#<br ?/?>\s*$#s', '', $html)) . '</p>';
