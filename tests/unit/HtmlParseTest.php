@@ -13,9 +13,9 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\sqc\Question', $q);
         $this->assertEquals("Question", $q->title);
-        $this->assertEquals("", $q->description);
+        $this->assertEquals("", $q->intro);
 
-        $this->assertCount(2, $q->answers);
+        $this->assertCount(2, $q->answers, "Wrong nomber of answers: " . print_r($q->answers, true));
         $this->assertEquals(false, $q->answers[0]->correct);
         $this->assertEquals("Incorrect", $q->answers[0]->content);
         $this->assertEquals(true, $q->answers[1]->correct);
@@ -51,9 +51,9 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('sqc\Question', $q);
         $this->assertEquals("Question", $q->title);
-        $this->assertEquals("Baratin<br />long", $q->description);
+        $this->assertEquals("<p>Baratin<br/>long</p>", $q->intro);
 
-        $this->assertCount(3, $q->answers);
+        $this->assertCount(3, $q->answers, "Wrong nomber of answers: " . print_r($q->answers, true));
         $this->assertEquals(false, $q->answers[0]->correct);
         $this->assertEquals("Incorrect", $q->answers[0]->content);
         $this->assertEquals(true, $q->answers[2]->correct);
@@ -88,12 +88,12 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
     {
         $qs = sqc\Question::createMultiFromHtml($html);
 
-        $this->assertCount(2, $qs);
+        $this->assertCount(2, $qs, "Wrong nomber of questions: "); //  . print_r($qs, true)
         $this->assertInstanceOf('sqc\Question', $qs[0]);
         $this->assertInstanceOf('sqc\Question', $qs[1]);
         $this->assertEquals("Question1", $qs[0]->title);
         $this->assertEquals("Question2", $qs[1]->title);
-        $this->assertEquals("Baratin<br />long", $qs[0]->description);
+        $this->assertEquals("<p>Baratin<br/>long</p>", $qs[0]->intro);
     }
 
     /**

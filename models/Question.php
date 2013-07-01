@@ -28,6 +28,15 @@ class Question
     /** @var Answer[] */
     public $answers;
 
+    protected static function cleanupHtml($html)
+    {
+        return trim(
+                preg_replace('#<strong><br ?/?></strong>#i', '<br />',
+                    preg_replace('#<span[^>]*><br ?/?></span>#i', '<br />', $html)
+                )
+        );
+    }
+
     /**
      * Create a new Question from a HTML string.
      *
@@ -37,8 +46,81 @@ class Question
     public static function createFromHtml($html)
     {
         $q = new self;
+        $q->answers = array();
+        $html = self::cleanupHtml($html);
 
-        // TODO
+        $dom = new \DOMDocument();
+        $dom->loadHTML('<div>' . $html . '</div>');
+        $dom->removeChild($dom->firstChild); // remove <!DOCTYPE
+        $spans = $dom->getElementsByTagName('span');
+        $spansToDelete = array();
+        foreach ($spans as $span) {
+            if ($span->attributes->getNamedItem("style")) {
+                $style = $span->attributes->getNamedItem("style")->nodeValue;
+                if (preg_match('/\b(line-through|underline)\b/', $style, $m)) {
+                    $a = new Answer();
+                    $a->correct = $m[1] === 'underline' ? true : false;
+                    foreach ($span->childNodes as $node) {
+                        if ($node->nodeName === 'br') {
+                            if (trim($a->content)) {
+                                // newline => split answer
+                                $q->answers[] = $a;
+                                $a = new Answer();
+                                $a->correct = $m[1] === 'underline' ? true : false;
+                            }
+                        } else {
+                            $a->content .= $dom->saveXml($node);
+                        }
+                    }
+                    if (trim($a->content)) {
+                        $q->answers[] = $a;
+                    }
+                    $spansToDelete[] = $span;
+                }
+            }
+        }
+        // cannot update dom while reading, a second loop is necessary
+        foreach ($spansToDelete as $span) {
+            $span->parentNode->removeChild($span);
+        }
+        //echo "\n**********\n$html";
+        $html = $dom->saveXml($dom->firstChild->firstChild->firstChild->firstChild);
+        //echo "\n***********\n$html\n***********\n"; print_r($q->answers);
+
+        if (preg_match('#^\s*<p>\s*<strong>(.+?)</strong>\s*</p>#i', $html, $m)) {
+            $strong = $m[1];
+            if (stripos($strong, '<p>') === false) {
+                if (stripos($strong, '<br') === false) {
+                    $q->title = $strong;
+                    $html = preg_replace('#^\s*<p>\s*<strong>(.+?)</strong>\s*</p>#', '', $html);
+                } else {
+                    preg_match('#^(.+?)<br ?/?>(.+)$#', $strong, $m);
+                    $q->title = preg_replace('#</strong>\s*$#i', '', $m[1]);
+                    $html = preg_replace('#^\s*<p>\s*<strong>(.+?)</strong>\s*<br ?/?>#', '<p>', $html);
+                }
+            }
+        }
+        if (empty($q->title)) {
+            if (preg_match('#^\s*<p>\s*<strong>(.+?)</strong>\s*<br ?/?>#i', $html, $m)) {
+                $q->title = $m[1];
+                $html = str_replace($m[0], '<p>', $html);
+            } else if (preg_match('#^\s*<p>\s*<strong>(.+?)<br ?/?>\s*</strong>#i', $html, $m)) {
+                $q->title = $m[1];
+                echo $m[0];
+                $html = str_replace($m[0], '<p>', $html);
+            } else {
+                throw new \Exception("Invalid format of HTML");
+            }
+        }
+
+        if (preg_match('/^\s*<p>/s', $html)) {
+            $q->intro = trim(preg_replace('#<br ?/?>\s*</p>\s*$#s', '</p>', $html));
+        } else if (preg_match('/^\s*$/s', $html)) {
+            $q->intro = '';
+        } else {
+            $q->intro = '<p>' . trim(preg_replace('#<br ?/?>\s*$#s', '', $html)) . '</p>';
+        }
+        $q->introformat = 1; // FORMAT_HTML;
 
         return $q;
     }
