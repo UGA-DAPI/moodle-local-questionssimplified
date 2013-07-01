@@ -42,6 +42,28 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testHtml1()
+    {
+        $html = '<p><strong>Question</strong></p>
+<p><strong></strong>Une intro</p>
+<p>plutôt longue</p>
+<p>bref, du baratin</p>
+<p><span style="text-decoration: underline;"></span><span style="text-decoration: line-through;">Incorrect</span></p>
+<p><span style="text-decoration: underline;">Correct</span></p>
+<p><span style="text-decoration: underline;">Correct2</span></p>';
+        $q = sqc\Question::createFromHtml($html);
+
+        $this->assertInstanceOf('\sqc\Question', $q);
+        $this->assertEquals("Question", $q->title);
+        $this->assertEquals('<p>Une intro</p> <p>plutôt longue</p> <p>bref, du baratin</p>', $q->intro);
+
+        $this->assertCount(3, $q->answers, "Wrong nomber of answers: " . print_r($q->answers, true));
+        $this->assertEquals(false, $q->answers[0]->correct);
+        $this->assertEquals("Incorrect", $q->answers[0]->content);
+        $this->assertEquals(true, $q->answers[1]->correct);
+        $this->assertEquals("Correct", $q->answers[1]->content);
+    }
+
     /**
      * @dataProvider provideFullHtmlChunks
      */

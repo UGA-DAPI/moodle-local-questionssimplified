@@ -51,7 +51,7 @@ class Question
 
         // questions are identified with DOM and removed from the HTML
         $dom = new \DOMDocument();
-        $dom->loadHTML('<div>' . $html . '</div>');
+        $dom->loadHTML('<div>' . mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8') . '</div>');
         if (is_a($dom->firstChild, 'DOMDocumentType')) {
             $dom->removeChild($dom->firstChild); // remove <!DOCTYPE
         }
@@ -99,7 +99,7 @@ class Question
         foreach ($div->childNodes as $node) {
             $html .= $dom->saveXml($node);
         }
-        $html = str_replace(array("\n", "<p/>"), array(' ', ''), $html);
+        $html = str_replace(array("\n", "<p/>", '<strong/>', '<span/>'), array(' ', '', '', ''), $html);
         $html = preg_replace('#<p>\s*</p>\s*#', '', $html);
         $html = preg_replace('#<p>\s*<br ?/?>\s*</p>\s*#', '', $html);
 
