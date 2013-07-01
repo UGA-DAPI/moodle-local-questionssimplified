@@ -43,7 +43,7 @@ $PAGE->set_title(get_string('standardEdit', 'local_questionssimplified'));
 $PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' - ' . $course->fullname);
 echo $OUTPUT->header();
 
-$form = new questionssimplified_standard_form(null, $questions);
+$form = new questionssimplified_standard_form(null, array('course' => $course, 'questions' => $questions));
 
 $data = $form->get_data();
 if ($data) {

@@ -67,21 +67,29 @@ class questionssimplified_standard_form extends moodleform {
         //-------------------------------------------------------------------------------
         $this->add_action_buttons(false, get_string('submit'));
 
+        $mform->addElement('hidden', 'course');
+        $mform->setType('course', PARAM_INT);
+
         $this->init_values();
     }
 
     /**
-     * Called by moodleform_mod::set_data() as a pre-hook.
+     * Called at the end of the form definition.
      *
      * @global moodle_database $DB
-     * @param array $default_values
      */
     function init_values(){
         if (empty($this->_customdata)) {
             return;
         }
+        if (!empty($this->_customdata['course'])) {
+            $this->_form->setDefault('course', $this->_customdata['course']->id);
+        }
+        if (empty($this->_customdata['questions'])) {
+            return;
+        }
         $qrank = 0;
-        foreach ($this->_customdata as $question) {
+        foreach ($this->_customdata['questions'] as $question) {
             /* @var $question \sqc\Question */
             $this->_form->setDefault("question[$qrank][id]", $question->id);
             $this->_form->setDefault("question[$qrank][title]", $question->title);
