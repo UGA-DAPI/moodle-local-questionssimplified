@@ -149,8 +149,7 @@ class Question
      */
     public static function createMultiFromHtml($html)
     {
-        // TODO
-        $split = array($html);
+        $split = preg_split('/(?=<p>\s*<strong>)/', $html, null, PREG_SPLIT_NO_EMPTY);
 
         return array_map(array('\sqc\Question', 'createFromHtml'), $split);
     }
