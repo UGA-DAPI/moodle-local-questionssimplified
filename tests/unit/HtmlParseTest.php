@@ -39,6 +39,11 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
                  <span style="text-decoration: line-through;">Incorrect</span><br />
                  <span style="text-decoration: underline;">Correct</span></p>'
             ),
+            array( // Word-10.0 2002 + IE8
+                '<p><b>Question</b></p>
+                 <p><span style="text-decoration: line-through;">Incorrect</span></p>
+                 <p><span style="text-decoration: underline;">Correct</span></p>'
+            ),
         );
     }
 
@@ -106,6 +111,13 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
                  <p><span style="text-decoration: line-through;"></span><span style="text-decoration: underline;">Correct1</span></p>
                  <p><span style="text-decoration: underline;">Correct2</span></p>'
             ),
+            array( // Word-10.0 2002 + IE8
+                '<p><b>Question</b></p>
+                 <p>Baratin<br />long</p>
+                 <p><span style="text-decoration: line-through;">Incorrect</span></p>
+                 <p><span style="text-decoration: underline;">Correct1</span></p>
+                 <p><span style="text-decoration: underline;">Correct2</span></p>'
+            )
         );
     }
 
@@ -148,6 +160,17 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
                  <p><strong /><span style="text-decoration: line-through;">Incorrect</span><br />
                  <span style="text-decoration: underline;">Correct</span></p>',
             ),
+            array( // Word-10.0 2002 + IE8
+                '<p><b>Question1</b></p>
+                 <p>Baratin<br />long<br /></p>
+                 <p><span style="text-decoration: line-through;">Incorrect</span></p>
+                 <p><span style="text-decoration: underline;">Correct1</span></p>
+                 <p><span style="text-decoration: underline;">Correct2</span></p>
+                 <p><span style="text-decoration: underline;"> </span></p>
+                 <p><b>Question2</b></p>
+                 <p><span style="text-decoration: line-through;">Incorrect</span></p>
+                 <p><span style="text-decoration: underline;">Correct</span></p>'
+            )
         );
     }
 }
