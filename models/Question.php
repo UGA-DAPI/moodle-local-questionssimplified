@@ -154,8 +154,9 @@ class Question
      */
     public static function createMultiFromHtml($html)
     {
+        $html = preg_replace('#<p>\s*<(\w+)[^>]*?>\s*<\1>\s*</p>#', '<p></p>', $html);
         $split = preg_split(
-                '/(?=<p>\s*<strong>)/',
+                '/(?=<p>\s*<(?:strong|b)>)/',
                 str_replace(array('<strong></strong>', '<strong/>', '<strong />'), array('', '', ''), $html),
                 null,
                 PREG_SPLIT_NO_EMPTY
