@@ -106,29 +106,32 @@ class Question
         $html = preg_replace('#<p>\s*<br ?/?>\s*</p>\s*#', '', $html);
 
         // DOM isn't suitable for title and intro, so regexp are used
-        if (preg_match('#^\s*<p>\s*<strong>(.+?)</strong>\s*</p>#i', $html, $m)) {
-            $strong = $m[1];
-            if (stripos($strong, '<p>') === false) {
-                if (stripos($strong, '<br') === false) {
-                    $q->title = $strong;
-                    $html = preg_replace('#^\s*<p>\s*<strong>(.+?)</strong>\s*</p>#', '', $html);
-                } else {
-                    preg_match('#^(.+?)<br ?/?>(.+)$#', $strong, $m);
-                    $q->title = preg_replace('#</strong>\s*$#i', '', $m[1]);
-                    $html = preg_replace('#^\s*<p>\s*<strong>(.+?)</strong>\s*<br ?/?>#', '<p>', $html);
+        foreach (array('strong', 'b') as $btag) {
+            if (empty($q->title) && preg_match('#^\s*<p>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*</p>#i', $html, $m)) {
+                $strong = $m[1];
+                if (stripos($strong, '<p>') === false) {
+                    if (stripos($strong, '<br') === false) {
+                        $q->title = $strong;
+                        $html = preg_replace('#^\s*<p>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*</p>#', '', $html);
+                    } else {
+                        preg_match('#^(.+?)<br ?/?>(.+)$#', $strong, $m);
+                        $q->title = preg_replace('#</' . $btag .'>\s*$#i', '', $m[1]);
+                        $html = preg_replace('#^\s*<p>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*<br ?/?>#', '<p>', $html);
+                    }
+                }
+            }
+            if (empty($q->title)) {
+                if (preg_match('#^\s*<p>\s*<' . $btag . '>(.+?)</' . $btag .'>\s*<br ?/?>#i', $html, $m)) {
+                    $q->title = $m[1];
+                    $html = str_replace($m[0], '<p>', $html);
+                } else if (preg_match('#^\s*<p>\s*<' . $btag .'>(.+?)<br ?/?>\s*</' . $btag .'>#i', $html, $m)) {
+                    $q->title = $m[1];
+                    $html = str_replace($m[0], '<p>', $html);
                 }
             }
         }
         if (empty($q->title)) {
-            if (preg_match('#^\s*<p>\s*<strong>(.+?)</strong>\s*<br ?/?>#i', $html, $m)) {
-                $q->title = $m[1];
-                $html = str_replace($m[0], '<p>', $html);
-            } else if (preg_match('#^\s*<p>\s*<strong>(.+?)<br ?/?>\s*</strong>#i', $html, $m)) {
-                $q->title = $m[1];
-                $html = str_replace($m[0], '<p>', $html);
-            } else {
-                throw new \Exception("Invalid format of HTML");
-            }
+            throw new \Exception("Invalid format of HTML");
         }
 
         if (preg_match('/^\s*<p>/s', $html)) {
