@@ -51,7 +51,6 @@ class questionssimplified_standard_form extends moodleform {
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
             $this->repeatElements($repeatQuestion, $typesQuestion, $qrank);
 
-            var_dump($this->_customdata['questions']);
             if (empty($this->_customdata['questions'][$qrank])){
                 $answersNo = 3; // empty answers if none are given
             } else {
