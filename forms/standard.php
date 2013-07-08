@@ -156,7 +156,7 @@ class questionssimplified_standard_form extends moodleform {
     protected function repeatElements($elements, $types, $rank, array $replacements=array()) {
         $replacements['{no}'] = $rank;
         foreach ($elements as $e) {
-            $element = self::cloneRepeatedElement($e, $rank, $replacements);
+            $element = self::cloneRepeatedElement($e, $replacements);
             $this->_form->addElement($element);
         }
         foreach ($types as $name => $type) {
@@ -173,7 +173,7 @@ class questionssimplified_standard_form extends moodleform {
      * @param HTML_QuickForm_element $e
      * @return HTML_QuickForm_element
      */
-    private static function cloneRepeatedElement($e, $rank, array $replacements) {
+    private static function cloneRepeatedElement($e, array $replacements) {
         $element = fullclone($e);
         $name = str_replace(array_keys($replacements), array_values($replacements), $element->getName());
         // display

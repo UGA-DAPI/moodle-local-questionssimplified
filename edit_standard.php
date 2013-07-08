@@ -53,6 +53,9 @@ $data = $form->get_data();
 if ($data) {
     foreach ($data->question as $line) {
         $question = \sqc\Question::buildFromArray($line);
+        if ($course->id === $SITE->id) {
+            $question->category = 2;
+        }
         if (!$question->save() && $question->title) {
             echo "ERROR saving question";
             var_dump($question); /// @todo Remove var_dump from prod code
