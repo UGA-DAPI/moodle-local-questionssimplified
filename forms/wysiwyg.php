@@ -30,8 +30,8 @@ class questionssimplified_wysiwyg_form extends moodleform {
 
         $this->add_action_buttons(false, get_string('submit'));
 
-        $mform->addElement('hidden', 'course');
-        $mform->setType('course', PARAM_INT);
+        $mform->addElement('hidden', 'category');
+        $mform->setType('category', PARAM_INT);
 
         $this->init_values();
     }
@@ -45,8 +45,8 @@ class questionssimplified_wysiwyg_form extends moodleform {
         if (empty($this->_customdata)) {
             return;
         }
-        if (!empty($this->_customdata['course'])) {
-            $this->_form->setDefault('course', $this->_customdata['course']->id);
+        if (!empty($this->_customdata['category'])) {
+            $this->_form->setDefault('category', $this->_customdata['category']->id);
         }
     }
 

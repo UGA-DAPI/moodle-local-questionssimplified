@@ -25,7 +25,7 @@ class Question
     /** @var integer */
     public $introformat;
 
-    public $category;
+    public $categoryId;
 
     /** @var Answer[] */
     public $answers;
@@ -263,7 +263,7 @@ class Question
         }
         $question = new self();
         $question->id = $record->id;
-        $question->category = $record->category;
+        $question->categoryId = $record->category;
         $question->title = $record->name;
         $question->intro = $record->questiontext;
         $question->introformat = $record->questiontextformat;
@@ -305,7 +305,7 @@ class Question
         global $USER;
         $record = array(
             'id' => $this->id,
-            'category' => $this->category,
+            'category' => $this->categoryId,
             // 'parent' => ,
             'name' => $this->getNormalizedTitle(),
             'questiontext' => $this->intro,

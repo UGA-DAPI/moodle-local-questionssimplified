@@ -15,11 +15,8 @@ global $DB, $OUTPUT, $PAGE, $SITE;
 /* @var $OUTPUT core_renderer */
 /* @var $PAGE moodle_page */
 
-$courseid  = optional_param('course', $SITE->id, PARAM_INT);   // course id (defaults to Site)
-$questionsId = optional_param('questions', '', PARAM_SEQUENCE);   // course id (defaults to Site)
-
-$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-unset($courseid);
+$categoryid = optional_param('category', 0, PARAM_INT);
+$questionsId = optional_param('questions', '', PARAM_SEQUENCE);
 
 if ($questionsId) {
     $questions = \sqc\Question::findAllById(explode(',', $questionsId));
@@ -27,6 +24,21 @@ if ($questionsId) {
     $questions = array();
 }
 unset($questionsId);
+
+if ($questions) {
+    $categoryid = $questions[0]->categoryId;
+    $category = $DB->get_record('question_categories', array('id' => $categoryid));
+} else {
+    /**
+     * @todo If no category is given, redirect to a choosing page?
+     */
+    $category = $DB->get_record('question_categories', array('id' => $categoryid));
+    if (!$category) {
+        print_error('categorydoesnotexist', 'question');
+    }
+}
+unset($categoryid);
+$context = context::instance_by_id($category->contextid);
 
 /**
  * @todo Check permissions
@@ -37,24 +49,24 @@ $PAGE->set_pagelayout('admin');
 $url = new moodle_url('/local/questionssimplified/edit_standard.php');
 $PAGE->set_url($url);
 
-$context = context_course::instance($course->id);
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('standardEdit', 'local_questionssimplified'));
-$PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' - ' . $course->fullname);
+$PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' - ' . $category->name);
 echo $OUTPUT->header();
 
-$form = new questionssimplified_standard_form(null, array('course' => $course, 'questions' => $questions));
-
-/**
- * @todo Use the "course" param unless the question already has a courseid.
- */
+$form = new questionssimplified_standard_form(null, array('category' => $category, 'questions' => $questions));
 
 $data = $form->get_data();
 if ($data) {
     foreach ($data->question as $line) {
         $question = \sqc\Question::buildFromArray($line);
-        if ($course->id === $SITE->id) {
-            $question->category = 2;
+        if (empty($question->categoryId)) {
+            $question->categoryId = $category->id;
+        } else {
+            $qcategory = $DB->get_record('question_categories', array('id' => $question->category));
+            if (!$qcategory) {
+                print_error('categorydoesnotexist', 'question');
+            }
         }
         if (!$question->save() && $question->title) {
             echo "ERROR saving question";
