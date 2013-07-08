@@ -41,7 +41,7 @@ class questionssimplified_standard_form extends moodleform {
         );
 
         if ($this->_customdata){
-            $repeatNo = count($this->_customdata);
+            $repeatNo = count($this->_customdata['questions']);
         } else {
             $repeatNo = 2;
         }
@@ -51,10 +51,11 @@ class questionssimplified_standard_form extends moodleform {
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
             $this->repeatElements($repeatQuestion, $typesQuestion, $qrank);
 
-            if (empty($this->_customdata[$qrank])){
+            var_dump($this->_customdata['questions']);
+            if (empty($this->_customdata['questions'][$qrank])){
                 $answersNo = 3; // empty answers if none are given
             } else {
-                $answersNo = 1 + count($this->_customdata[$qrank]->answers);
+                $answersNo = 1 + count($this->_customdata['questions'][$qrank]->answers);
             }
             $answersNo = $this->initRepeat("q{$qrank}answersno", $answersNo, "q{$qrank}answersadd");
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
