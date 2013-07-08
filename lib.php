@@ -15,20 +15,19 @@ require __DIR__ . '/models/Answer.php';
 // doc https://moodle.org/mod/forum/discuss.php?d=170325#yui_3_7_3_2_1359043225921_310
 
 function local_questionssimplified_extends_navigation(global_navigation $navigation) {
-    global $USER, $PAGE;
+    global $PAGE;
 
     $permission = TRUE;
-    $context = $PAGE->context;
 
     if ($permission) {
         $node1 = $navigation->add(get_string('MCQcreate', 'local_questionssimplified'));
-        $node2 = $node1->add(
+        $node1->add(
 			get_string('wysiwygEdit', 'local_questionssimplified'),
 			new moodle_url('/local/questionssimplified/edit_wysiwyg.php')
-			);
-        $node3 = $node1->add(
+		);
+        $node1->add(
 			get_string('standardEdit', 'local_questionssimplified'),
 			new moodle_url('/local/questionssimplified/edit_standard.php')
-			);
+		);
 	}
 }
