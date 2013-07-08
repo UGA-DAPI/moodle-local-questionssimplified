@@ -33,7 +33,7 @@ require_capability();
 
 $PAGE->set_pagelayout('admin');
 
-$url = new moodle_url('/local/questionssimplified/edit_wysiwig.php');
+$url = new moodle_url('/local/questionssimplified/edit_wysiwyg.php');
 $PAGE->set_url($url);
 
 $context = context_course::instance($course->id);
