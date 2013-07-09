@@ -14,12 +14,11 @@ global $COURSE, $OUTPUT, $PAGE, $SITE;
 /* @var $PAGE moodle_page */
 
 
+$redirect = required_param('redirect', PARAM_ALPHA);
+$courseid = optional_param('course', 0, PARAM_INT);   // course id (defaults to 0)
+
 // $context = context::instance_by_id($category->contextid);
 
-
-/**
- * @todo Check permissions
- */
 require_login();
 
 $PAGE->set_pagelayout('admin');
@@ -34,7 +33,8 @@ echo $OUTPUT->header();
 
 
 $courses = find_user_courses_as_teacher();
-echo html_courses_list($courses, $COURSE->id);
+echo html_courses_list($courses, '/local/questionssimplified/course_choice.php', $COURSE->id, $redirect);
+
 
 
 echo $OUTPUT->footer();

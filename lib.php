@@ -53,7 +53,7 @@ function find_user_courses_as_teacher() {
     return $courses;
 }
 
-function html_courses_list($courses, $currentcourseid) {
+function html_courses_list($courses, $baseurl, $currentcourseid, $redirect) {
 
     $html = "<ul>\n";
     foreach ($courses as $courseid => $name) {
@@ -64,7 +64,8 @@ function html_courses_list($courses, $currentcourseid) {
             $em = '';
             $endem = '';
         }
-        $html .= "<ul>" . $em . $name . $endem . "</ul> \n";
+		$url = new moodle_url($baseurl, array('course' => $courseid, 'redirect' => $redirect));
+        $html .= "<ul>" . $em . html_writer::link($url, $name) . $endem . "</ul> \n";
     }
     $html .= "</ul>\n";
     return $html;
