@@ -7,6 +7,8 @@ if (!defined('MOODLE_INTERNAL')) {
 require_once($CFG->libdir.'/formslib.php');
 
 class questionssimplified_standard_form extends moodleform {
+    const LEGEND_WORDWRAP_WIDTH = 40;
+
     function definition() {
         global $CFG;
         $mform = $this->_form;
@@ -18,7 +20,7 @@ class questionssimplified_standard_form extends moodleform {
 
         //-------------------------------------------------------------------------------
         $repeatQuestion = array(
-            $mform->createElement('header', '', get_string('question') . ' {no}'),
+            $mform->createElement('header', '', get_string('question') . ' {no} {title}'),
             $mform->createElement('hidden', 'question[{no}][id]', 0),
             $mform->createElement('text', 'question[{no}][title]', get_string('questionname', 'question'), array('size'=>'80')),
             $mform->createElement('editor', 'question[{no}][intro]', get_string('description'), array('rows' => 10), array('maxfiles' => 0)),
@@ -49,7 +51,12 @@ class questionssimplified_standard_form extends moodleform {
 
         $addstring = get_string('addfields', 'form', 2);
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
-            $this->repeatElements($repeatQuestion, $typesQuestion, $qrank);
+            if (empty($this->_customdata['questions'][$qrank]->title)) {
+                $subst = array();
+            } else {
+                $subst = array('{title}' => ' - ' . wordwrap($this->_customdata['questions'][$qrank]->title, self::LEGEND_WORDWRAP_WIDTH));
+            }
+            $this->repeatElements($repeatQuestion, $typesQuestion, $qrank, $subst);
 
             if (empty($this->_customdata['questions'][$qrank])){
                 $answersNo = 3; // empty answers if none are given
