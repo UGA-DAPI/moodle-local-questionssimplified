@@ -42,6 +42,9 @@ if (!$category) {
 unset($courseid);
 $context = context::instance_by_id($category->contextid);
 
+if (!has_capability('moodle/question:add', $context)) {
+    redirect(new moodle_url('course_choice', array('redirect' => 'wysiwyg')));
+}
 /**
  * @todo Check permissions
  * has_capability('moodle/question:add', $catcontext);
