@@ -43,6 +43,9 @@ $context = context::instance_by_id($category->contextid);
 /**
  * @todo Check permissions
  */
+if (!has_capability('moodle/question:add', $context)) {
+    redirect(new moodle_url('course_choice', array('redirect' => 'standard')));
+}
 
 $PAGE->set_pagelayout('admin');
 
