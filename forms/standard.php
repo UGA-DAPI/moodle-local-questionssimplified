@@ -66,8 +66,12 @@ class questionssimplified_standard_form extends moodleform {
                 $answersNo = 3; // empty answers if none are given
             } else {
                 $answersNo = 1 + count($this->_customdata['questions'][$qrank]->answers);
-                if ($qrank > 1 && $accordion) {
-                    $mform->setExpanded("header-q$qrank", false);
+                if ($accordion) {
+                    if ($qrank > 0) { // first question is expanded, others are collapsed
+                        $mform->setExpanded("header-q$qrank", false);
+                    } else {
+                        $mform->setExpanded("header-q$qrank", true);
+                    }
                 }
             }
             $answersNo = $this->initRepeat("q{$qrank}answersno", $answersNo, "q{$qrank}answersadd");
