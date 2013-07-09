@@ -15,8 +15,6 @@ require __DIR__ . '/models/Answer.php';
 // doc https://moodle.org/mod/forum/discuss.php?d=170325#yui_3_7_3_2_1359043225921_310
 
 function local_questionssimplified_extends_navigation(global_navigation $navigation) {
-    global $PAGE;
-
     $permission = TRUE;
 
     if ($permission) {

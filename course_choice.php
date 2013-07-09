@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/locallib.php';
 require_once($CFG->dirroot . '/lib/questionlib.php');
 
-global $COURSE, $OUTPUT, $PAGE, $SITE;
+global $COURSE, $OUTPUT, $PAGE;
 /* @var $OUTPUT core_renderer */
 /* @var $PAGE moodle_page */
 
@@ -28,7 +28,7 @@ if ( ! array_key_exists($redirect, $redirections) ) {
 	throw new coding_exception("$redirect : redirection invalide.");
 }
 
-if (isset ($COURSE->id)) {
+if (isset($COURSE->id)) {
 	$context = context_course::instance($COURSE->id);
 } else {
 	$context = context_system::instance();
@@ -64,7 +64,7 @@ if ( $system == 0 && $courseid == 0 ) { // interactive page for user selection
 
 } else { // non-interactive redirection
 
-	if ( $system == 1) {
+	if ($system == 1) {
 		$context = context_system::instance();
 		$qcategory = question_get_default_category($context->id);
 		if ( ! $qcategory ) { // does not exist yet
@@ -72,8 +72,7 @@ if ( $system == 0 && $courseid == 0 ) { // interactive page for user selection
 		}
 		$url = new moodle_url($redirections[$redirect], array('category' => $qcategory->id));
 		redirect($url);
-	}
-	elseif ($courseid > 0) {
+	} else if ($courseid > 0) {
 		$context = context_course::instance($courseid);
 		$qcategory = question_get_default_category($context->id);
 		if ( ! $qcategory ) { // does not exist yet
