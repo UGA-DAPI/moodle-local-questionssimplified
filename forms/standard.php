@@ -18,9 +18,7 @@ class questionssimplified_standard_form extends moodleform {
          * @todo Toggle the advanced settings (feedback+weight per question)
          */
 
-        if (method_exists($mform, 'setCollapsibleElements')) {
-            $accordion = true;
-        }
+        $accordion = method_exists($mform, 'setExpanded');
 
         //-------------------------------------------------------------------------------
         $repeatQuestion = array(
