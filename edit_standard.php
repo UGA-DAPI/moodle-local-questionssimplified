@@ -29,9 +29,9 @@ if ($questions) {
     $categoryid = $questions[0]->categoryId;
     $category = $DB->get_record('question_categories', array('id' => $categoryid));
 } else {
-    /**
-     * @todo If no category is given, redirect to a choosing page?
-     */
+    if (!$categoryid) {
+        redirect(new moodle_url('course_choice', array('redirect' => 'standard')));
+    }
     $category = $DB->get_record('question_categories', array('id' => $categoryid));
     if (!$category) {
         print_error('categorydoesnotexist', 'question');

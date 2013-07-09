@@ -22,9 +22,8 @@ $courseid  = optional_param('course', $COURSE->id, PARAM_INT);   // course id (d
 $category = $categoryid ? $DB->get_record('question_categories', array('id' => $categoryid)) : null;
 unset($categoryid);
 if (!$category) {
-    /**
-     * @todo If no category is given, redirect to a choosing page?
-     */
+    redirect(new moodle_url('course_choice', array('redirect' => 'standard')));
+    /*
     // If no category is given, use the course's default question category
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
     if (!$course) {
@@ -38,6 +37,7 @@ if (!$category) {
         print_error('categorydoesnotexist', 'question');
     }
     unset($course);
+     */
 }
 unset($courseid);
 $context = context::instance_by_id($category->contextid);
