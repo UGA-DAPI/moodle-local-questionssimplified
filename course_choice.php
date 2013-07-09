@@ -8,33 +8,79 @@
 
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
+require_once($CFG->dirroot . '/lib/questionlib.php');
 
 global $COURSE, $OUTPUT, $PAGE, $SITE;
 /* @var $OUTPUT core_renderer */
 /* @var $PAGE moodle_page */
 
-
 $redirect = required_param('redirect', PARAM_ALPHA);
 $courseid = optional_param('course', 0, PARAM_INT);   // course id (defaults to 0)
+$system = optional_param('system', 0, PARAM_INT);     // choice = system default category
 
-// $context = context::instance_by_id($category->contextid);
+$redirections = array(
+	'standard' => '/local/questionssimplified/edit_standard.php',
+	'wysiwyg' => '/local/questionssimplified/edit_wysiwyg.php',
+	'bank' => '/question/edit.php'
+);
 
-require_login();
+if ( ! array_key_exists($redirect, $redirections) ) {
+	throw new coding_exception("$redirect : redirection invalide.");
+}
 
-$PAGE->set_pagelayout('admin');
+if (isset ($COURSE->id)) {
+	$context = context_course::instance($COURSE->id);
+} else {
+	$context = context_system::instance();
+}
 
-$url = new moodle_url('/local/questionssimplified/course_choice.php');
-$PAGE->set_url($url);
+$selfurl = '/local/questionssimplified/course_choice.php';
 
-// $PAGE->set_context($context);
-$PAGE->set_title(get_string('courseChoice', 'local_questionssimplified'));
-$PAGE->set_heading(get_string('courseChoice', 'local_questionssimplified'));
-echo $OUTPUT->header();
+if ( $system == 0 && $courseid == 0 ) { // interactive page for user selection
+	require_login();
+
+	$PAGE->set_pagelayout('admin');
+	$PAGE->set_context($context);
+	$url = new moodle_url($selfurl);
+	$PAGE->set_url($url);
+
+	// $PAGE->set_context($context);
+	$PAGE->set_title(get_string('courseChoice', 'local_questionssimplified'));
+	$PAGE->set_heading(get_string('courseChoice', 'local_questionssimplified'));
+	echo $OUTPUT->header();
+
+	echo "<p>Choisissez le cours de rattachement des questions que vous allez saisir.</p>";
+
+	$courses = find_user_courses_as_teacher();
+	echo html_courses_list($courses, $selfurl, $COURSE->id, $redirect);
+
+	echo "<ul>";
+	$url = new moodle_url($selfurl, array('system' => 1, 'redirect' => $redirect));
+	echo "<li>" . html_writer::link($url, "Liste globale (système)") . "</li>";
+	echo "</ul>";
 
 
-$courses = find_user_courses_as_teacher();
-echo html_courses_list($courses, '/local/questionssimplified/course_choice.php', $COURSE->id, $redirect);
+	echo $OUTPUT->footer();
 
+} else { // non-interactive redirection
 
+	if ( $system == 1) {
+		$context = context_system::instance();
+		$qcategory = question_get_default_category($context->id);
+		if ( ! $qcategory ) { // does not exist yet
+			$qcategory = question_make_default_categories(array($context));
+		}
+		$url = new moodle_url($redirections[$redirect], array('category' => $qcategory->id));
+		redirect($url);
+	}
+	elseif ($courseid > 0) {
+		$context = context_course::instance($courseid);
+		$qcategory = question_get_default_category($context->id);
+		if ( ! $qcategory ) { // does not exist yet
+			$qcategory = question_make_default_categories(array($context));
+		}
+		$url = new moodle_url($redirections[$redirect], array('category' => $qcategory->id));
+		redirect($url);
+	}
 
-echo $OUTPUT->footer();
+}
