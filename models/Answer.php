@@ -70,7 +70,7 @@ class Answer
         /**
          * @todo convert formated text into raw text
          */
-        $answer->content = $record->answer;
+        $answer->content = strip_tags($record->answer);
         $answer->correct = $record->fraction == 0 ? false : true;
         return $answer;
     }
@@ -95,7 +95,7 @@ class Answer
         if (!empty($record['questionId'])) {
             $answer->questionId = $record['questionId'];
         }
-        $answer->content = $record['content'];
+        $answer->content = strip_tags($record['content']);
         $answer->correct = !empty($record['correct']);
         return $answer;
     }
