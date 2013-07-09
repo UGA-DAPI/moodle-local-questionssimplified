@@ -1,7 +1,7 @@
 <?php
 $string['pluginname'] = 'Questions simplifiées';
-$string['wysiwygEdit'] = 'Questions en WYSIWYG';
+$string['wysiwygEdit'] = 'Import / édition';
 $string['wysiwygHeader'] = 'Saisie des questions formatées';
-$string['standardEdit'] = 'Questions simplifiées';
+$string['standardEdit'] = 'Formulaire de questions';
 $string['standardHeader'] = 'Saisie des questions avec leurs réponses';
-$string['MCQcreate'] = 'Création de QCM';
+$string['MCQcreate'] = 'Mes questions';

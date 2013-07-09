@@ -29,5 +29,9 @@ function local_questionssimplified_extends_navigation(global_navigation $navigat
 			get_string('standardEdit', 'local_questionssimplified'),
 			new moodle_url('/local/questionssimplified/edit_standard.php')
 		);
+		$node1->add(
+			get_string('questionbank', 'question'),
+			new moodle_url('/question/edit.php') // manque courseid=? //** @todo **/
+		);
 	}
 }
