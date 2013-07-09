@@ -24,9 +24,13 @@ class questionssimplified_wysiwyg_form extends moodleform {
 
         $mform->addElement('header', 'general', get_string('wysiwygHeader', 'local_questionssimplified'));
 
+        $mform->addElement('static', 'intro', get_string('wysiwygIntroTitle', 'local_questionssimplified'));
+        $mform->setDefault('intro', get_string('wysiwygIntroContent', 'local_questionssimplified'));
+
         $mform->addElement('editor', 'questions', get_string('questions', 'question'), null, self::editor_options());
         $mform->setType('questions', PARAM_RAW);
         $mform->addRule('questions', get_string('required'), 'required', null, 'client');
+        $mform->addHelpButton('questions', 'wysiwigtext', 'local_questionssimplified');
 
         $this->add_action_buttons(false, get_string('submit'));
 
