@@ -5,3 +5,5 @@ $string['wysiwygHeader'] = 'Input formated questions';
 $string['standardEdit'] = 'Questions form';
 $string['standardHeader'] = 'Input questions and their answers';
 $string['MCQcreate'] = 'My questions';
+$string['courseChoice'] = 'Course Choice';
+
