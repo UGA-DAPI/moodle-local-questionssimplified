@@ -18,9 +18,13 @@ class questionssimplified_standard_form extends moodleform {
          * @todo Toggle the advanced settings (feedback+weight per question)
          */
 
+        if (method_exists($mform, 'setCollapsibleElements')) {
+            $accordion = true;
+        }
+
         //-------------------------------------------------------------------------------
         $repeatQuestion = array(
-            $mform->createElement('header', '', get_string('question') . ' {no} {title}'),
+            $mform->createElement('header', 'header-q{no}', get_string('question') . ' {no} {title}'),
             $mform->createElement('hidden', 'question[{no}][id]', 0),
             $mform->createElement('text', 'question[{no}][title]', get_string('questionname', 'question'), array('size'=>'80')),
             $mform->createElement('editor', 'question[{no}][intro]', get_string('description'), array('rows' => 10), array('maxfiles' => 0)),
@@ -62,6 +66,9 @@ class questionssimplified_standard_form extends moodleform {
                 $answersNo = 3; // empty answers if none are given
             } else {
                 $answersNo = 1 + count($this->_customdata['questions'][$qrank]->answers);
+                if ($qrank > 1 && $accordion) {
+                    $mform->setExpanded("header-q$qrank", false);
+                }
             }
             $answersNo = $this->initRepeat("q{$qrank}answersno", $answersNo, "q{$qrank}answersadd");
             for ($arank = 0 ; $arank < $answersNo ; $arank++) {
