@@ -16,7 +16,7 @@ global $COURSE, $OUTPUT, $PAGE;
 
 $redirect = required_param('redirect', PARAM_ALPHA);
 $courseid = optional_param('course', 0, PARAM_INT);   // course id (defaults to 0)
-$system = optional_param('system', 0, PARAM_INT);     // choice = system default category
+$system = optional_param('system', false, PARAM_BOOL);     // choice = system default category
 
 $redirections = array(
 	'standard' => '/local/questionssimplified/edit_standard.php',
@@ -36,7 +36,7 @@ if (isset($COURSE->id)) {
 
 $selfurl = '/local/questionssimplified/course_choice.php';
 
-if ( $system == 0 && $courseid == 0 ) { // interactive page for user selection
+if ( !$system && $courseid == 0 ) { // interactive page for user selection
 	require_login();
 
 	$PAGE->set_pagelayout('admin');
@@ -64,7 +64,7 @@ if ( $system == 0 && $courseid == 0 ) { // interactive page for user selection
 
 } else { // non-interactive redirection
 
-	if ($system == 1) {
+	if ($system) {
 		$context = context_system::instance();
 		$qcategory = question_get_default_category($context->id);
 		if ( ! $qcategory ) { // does not exist yet
