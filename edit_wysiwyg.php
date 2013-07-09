@@ -10,7 +10,7 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
 require_once __DIR__ . '/forms/wysiwyg.php';
 
-global $DB, $COURSE, $OUTPUT, $PAGE, $SITE;
+global $DB, $COURSE, $OUTPUT, $PAGE;
 
 /* @var $DB moodle_database */
 /* @var $OUTPUT core_renderer */
@@ -22,7 +22,7 @@ $courseid  = optional_param('course', $COURSE->id, PARAM_INT);   // course id (d
 $category = $categoryid ? $DB->get_record('question_categories', array('id' => $categoryid)) : null;
 unset($categoryid);
 if (!$category) {
-    redirect(new moodle_url('course_choice.php', array('redirect' => 'standard')));
+    redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
     /*
     // If no category is given, use the course's default question category
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
