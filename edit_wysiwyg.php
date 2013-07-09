@@ -22,7 +22,7 @@ $courseid  = optional_param('course', $COURSE->id, PARAM_INT);   // course id (d
 $category = $categoryid ? $DB->get_record('question_categories', array('id' => $categoryid)) : null;
 unset($categoryid);
 if (!$category) {
-    redirect(new moodle_url('course_choice', array('redirect' => 'standard')));
+    redirect(new moodle_url('course_choice.php', array('redirect' => 'standard')));
     /*
     // If no category is given, use the course's default question category
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
@@ -43,7 +43,7 @@ unset($courseid);
 $context = context::instance_by_id($category->contextid);
 
 if (!has_capability('moodle/question:add', $context)) {
-    redirect(new moodle_url('course_choice', array('redirect' => 'wysiwyg')));
+    redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
 }
 /**
  * @todo Check permissions

@@ -30,7 +30,7 @@ if ($questions) {
     $category = $DB->get_record('question_categories', array('id' => $categoryid));
 } else {
     if (!$categoryid) {
-        redirect(new moodle_url('course_choice', array('redirect' => 'standard')));
+        redirect(new moodle_url('course_choice.php', array('redirect' => 'standard')));
     }
     $category = $DB->get_record('question_categories', array('id' => $categoryid));
     if (!$category) {
