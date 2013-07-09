@@ -36,6 +36,10 @@ if (isset($COURSE->id)) {
 
 $selfurl = '/local/questionssimplified/course_choice.php';
 
+/**
+ * @todo Check permission to access system
+ */
+
 if ( !$system && $courseid == 0 ) { // interactive page for user selection
 	require_login();
 
