@@ -60,8 +60,13 @@ if ( !$system && $courseid == 0 ) { // interactive page for user selection
 
 	echo "<ul>";
 	$url = new moodle_url($selfurl, array('system' => 1, 'redirect' => $redirect));
-	echo "<li>" . html_writer::link($url, "Liste globale (système)") . "</li>";
+	// echo "<li>" . html_writer::link($url, "Liste globale (système)") . "</li>";
+	echo "<li>" . "Liste globale (système)" . "</li>"; //** @todo check permission **
 	echo "</ul>";
+
+	/**
+	 * @todo ajouter : Ajouter un cours || Demander la création d'un cours **
+	 */
 
 
 	echo $OUTPUT->footer();
@@ -74,15 +79,25 @@ if ( !$system && $courseid == 0 ) { // interactive page for user selection
 		if ( ! $qcategory ) { // does not exist yet
 			$qcategory = question_make_default_categories(array($context));
 		}
-		$url = new moodle_url($redirections[$redirect], array('category' => $qcategory->id));
+		if ($redirect == 'bank') {
+			$urlparams = array('courseid' => 1);
+		} else { //wysiwyg or standard
+			$urlparams = array('category' => $qcategory->id);
+		}
+		$url = new moodle_url($redirections[$redirect], $urlparams);
 		redirect($url);
-	} else if ($courseid > 0) {
+	} elseif ($courseid > 0) {
 		$context = context_course::instance($courseid);
 		$qcategory = question_get_default_category($context->id);
 		if ( ! $qcategory ) { // does not exist yet
 			$qcategory = question_make_default_categories(array($context));
 		}
-		$url = new moodle_url($redirections[$redirect], array('category' => $qcategory->id));
+		if ($redirect == 'bank') {
+			$urlparams = array('courseid' => $courseid);
+		} else { //wysiwyg or standard
+			$urlparams = array('category' => $qcategory->id);
+		}
+		$url = new moodle_url($redirections[$redirect], $urlparams);
 		redirect($url);
 	}
 

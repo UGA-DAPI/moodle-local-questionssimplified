@@ -29,7 +29,7 @@ function local_questionssimplified_extends_navigation(global_navigation $navigat
 		);
 		$node1->add(
 			get_string('questionbank', 'question'),
-			new moodle_url('/question/edit.php') // manque courseid=? //** @todo **/
+			new moodle_url('/local/questionssimplified/course_choice.php', array('redirect'=>'bank'))
 		);
 	}
 }
