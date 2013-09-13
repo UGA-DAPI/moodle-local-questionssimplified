@@ -76,7 +76,7 @@ if ($data) {
             var_dump($question); /// @todo Remove var_dump from prod code
         }
     }
-    die();
+    redirect(new moodle_url(''));
 }
 
 $form->display();
