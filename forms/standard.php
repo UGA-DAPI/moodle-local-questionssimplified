@@ -49,12 +49,15 @@ class questionssimplified_standard_form extends moodleform {
         } else {
             $repeatNo = 2;
         }
+        if ($repeatNo == 0) {
+            $repeatNo = 1;
+        }
         $repeatNo = $this->initRepeat("questionsno", $repeatNo);
 
         $addstring = get_string('addfields', 'form', 2);
         for ($qrank = 0 ; $qrank < $repeatNo ; $qrank++) {
             if (empty($this->_customdata['questions'][$qrank]->title)) {
-                $subst = array();
+                $subst = array('{title}' => '');
             } else {
                 $subst = array('{title}' => ' - ' . wordwrap($this->_customdata['questions'][$qrank]->title, self::LEGEND_WORDWRAP_WIDTH));
             }
