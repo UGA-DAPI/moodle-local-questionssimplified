@@ -199,6 +199,8 @@ class Question
         if (!$record->name) {
             return false;
         }
+
+        // save in "question"
         if ($record->id) {
             $DB->update_record('question', $record);
         } else {
@@ -209,6 +211,9 @@ class Question
         if (!$this->id) {
             return false;
         }
+
+        // save in "question_answers"
+        $answersIds = array();
         if ($this->answers) {
             $numCorrect = $this->countCorrectAnswers();
             foreach ($this->answers as $answer) {
@@ -216,11 +221,28 @@ class Question
                 if (!$answer->save($numCorrect)) {
                     return false;
                 }
+                $answersIds[] = $answer->id;
             }
             /**
              * @todo Delete other answers of this question
              * @todo Display an error when something went wrong
              */
+        }
+
+        // save in "question_multichoice"
+        $mc = $DB->get_record('question_multichoice', array('question' => $this->id));
+        if (!$mc) {
+            $mc = (object) array(
+                'id' => null,
+                'question' => $this->id,
+                'answers' => join(',', $answersIds),
+                'correctfeedback' => '',
+                'partiallycorrectfeedback' => '',
+                'incorrectfeedback' => '',
+            );
+            $mc->id = $DB->insert_record('question_multichoice', $mc);
+        } else {
+            $DB->update_record('question_multichoice', $mc);
         }
         return true;
     }
