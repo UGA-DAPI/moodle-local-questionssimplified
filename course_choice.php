@@ -24,7 +24,7 @@ $redirections = array(
 	'bank' => '/question/edit.php'
 );
 
-if ( ! array_key_exists($redirect, $redirections) ) {
+if ( ! isset($redirections[$redirect]) ) {
 	throw new coding_exception("$redirect : redirection invalide.");
 }
 
