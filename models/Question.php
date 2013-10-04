@@ -239,6 +239,7 @@ class Question
                 'correctfeedback' => '',
                 'partiallycorrectfeedback' => '',
                 'incorrectfeedback' => '',
+                'single' => ($this->countCorrectAnswers() > 1 ? 0 : 1),
             );
             $mc->id = $DB->insert_record('question_multichoice', $mc);
         } else {
