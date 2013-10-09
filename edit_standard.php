@@ -75,7 +75,7 @@ if ($data) {
             var_dump($question); /// @todo Remove var_dump from prod code
         }
     }
-    redirect(new moodle_url(''));
+    redirect(new moodle_url('/index.php'));
 }
 
 echo $OUTPUT->header();
