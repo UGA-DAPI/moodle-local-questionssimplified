@@ -55,7 +55,6 @@ $PAGE->set_url($url);
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('standardEdit', 'local_questionssimplified'));
 $PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' - ' . $category->name);
-echo $OUTPUT->header();
 
 $form = new questionssimplified_standard_form(null, array('category' => $category, 'questions' => $questions));
 
@@ -78,6 +77,8 @@ if ($data) {
     }
     redirect(new moodle_url(''));
 }
+
+echo $OUTPUT->header();
 
 $form->display();
 
