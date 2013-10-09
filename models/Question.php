@@ -359,7 +359,7 @@ class Question
      * @return int Num of correct answers
      */
     protected function countCorrectAnswers() {
-        if (empty($answers)) {
+        if (empty($this->answers)) {
             return 0;
         }
         $count = 0;
