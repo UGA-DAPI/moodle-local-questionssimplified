@@ -28,7 +28,7 @@ function local_questionssimplified_extends_navigation(global_navigation $navigat
 			new moodle_url('/local/questionssimplified/edit_standard.php')
 		);
 		$node1->add(
-			get_string('questionbank', 'question'),
+			get_string('questionbank', 'local_questionssimplified'),  // get_string('questionbank', 'question'),
 			new moodle_url('/local/questionssimplified/course_choice.php', array('redirect'=>'bank'))
 		);
 	}

@@ -84,7 +84,7 @@ class questionssimplified_standard_form extends moodleform {
         }
 
         //-------------------------------------------------------------------------------
-        $this->add_action_buttons(false, get_string('submit'));
+        $this->add_action_buttons(false, get_string('submitToQBank', 'local_questionssimplified'));
 
         $mform->addElement('hidden', 'category');
         $mform->setType('category', PARAM_INT);
