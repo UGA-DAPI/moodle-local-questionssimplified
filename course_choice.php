@@ -87,17 +87,7 @@ if ( !$system && $courseid == 0 ) { // interactive page for user selection
 		$url = new moodle_url($redirections[$redirect], $urlparams);
 		redirect($url);
 	} elseif ($courseid > 0) {
-		$context = context_course::instance($courseid);
-		$qcategory = question_get_default_category($context->id);
-		if ( ! $qcategory ) { // does not exist yet
-			$qcategory = question_make_default_categories(array($context));
-		}
-		if ($redirect == 'bank') {
-			$urlparams = array('courseid' => $courseid);
-		} else { //wysiwyg or standard
-			$urlparams = array('category' => $qcategory->id);
-		}
-		$url = new moodle_url($redirections[$redirect], $urlparams);
+		$url = new moodle_url($redirections[$redirect], array('courseid' => $courseid));
 		redirect($url);
 	}
 
