@@ -49,3 +49,14 @@ function get_default_qcategory($course) {
             array(context_course::instance($course->id)->id)
     );
 }
+
+function get_qcategories($course) {
+    global $DB;
+    if (!$course) {
+        die('Course required');
+    }
+    return $DB->get_records_sql_menu(
+            "SELECT id, name FROM {question_categories} WHERE contextid = ? ORDER BY sortorder ASC",
+            array(context_course::instance($course->id)->id)
+    );
+}
