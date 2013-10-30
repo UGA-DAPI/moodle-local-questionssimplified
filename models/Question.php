@@ -173,6 +173,7 @@ class Question
      */
     public function setAttributes(array $attr) {
         $this->id = isset($attr['id']) ? $attr['id'] : null;
+        $this->categoryId = isset($attr['category']) ? (int) $attr['category'] : '';
         $this->title = isset($attr['title']) ? $attr['title'] : '';
         $this->intro = isset($attr['intro']['text']) ? $attr['intro']['text'] : '';
         $this->introformat = $attr['intro']['format'];
