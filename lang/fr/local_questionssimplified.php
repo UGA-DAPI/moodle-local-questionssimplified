@@ -19,3 +19,4 @@ $string['wysiwygIntroContent'] = "Cette interface sert à 3 choses : <ul>"
 $string['wysiwigtext'] = 'Le titre';
 $string['wysiwigtext_help'] = 'La doc';
 $string['submitToQBank'] = 'Envoyer à la banque de questions';
+$string['qcategory'] = 'Catégorie de question';

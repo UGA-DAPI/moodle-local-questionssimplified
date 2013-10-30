@@ -12,3 +12,4 @@ $string['wysiwygIntroContent'] = 'Use wisely';
 $string['wysiwigtext'] = 'A title';
 $string['wysiwigtext_help'] = 'A help text';
 $string['submitToQBank'] = 'Submit to question bank';
+$string['qcategory'] = 'Question Category';
