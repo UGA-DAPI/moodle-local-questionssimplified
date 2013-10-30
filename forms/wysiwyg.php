@@ -36,6 +36,8 @@ class questionssimplified_wysiwyg_form extends moodleform {
 
         $mform->addElement('hidden', 'category');
         $mform->setType('category', PARAM_INT);
+        $mform->addElement('hidden', 'courseid', $this->_customdata['course']->id);
+        $mform->setType('courseid', PARAM_INT);
 
         $this->init_values();
     }

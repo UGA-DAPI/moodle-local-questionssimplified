@@ -60,7 +60,7 @@ $PAGE->set_context($context);
 $PAGE->set_title(get_string('wysiwygEdit', 'local_questionssimplified'));
 $PAGE->set_heading(get_string('wysiwygEdit', 'local_questionssimplified') . ' - ' . $category->name);
 
-$form = new questionssimplified_wysiwyg_form(null, array('category' => $category));
+$form = new questionssimplified_wysiwyg_form(null, array('category' => $category, 'course' => $course));
 
 $data = $form->get_data();
 if ($data) {
