@@ -8,6 +8,7 @@
 
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
+require_once __DIR__ . '/locallib.php';
 require_once __DIR__ . '/forms/wysiwyg.php';
 
 global $DB, $COURSE, $OUTPUT, $PAGE;
@@ -17,29 +18,22 @@ global $DB, $COURSE, $OUTPUT, $PAGE;
 /* @var $PAGE moodle_page */
 
 $categoryid = optional_param('category', 0, PARAM_INT);
-$courseid  = optional_param('course', $COURSE->id, PARAM_INT);   // course id (defaults to current course)
+$courseid  = optional_param('courseid', 0, PARAM_INT);
+
+$course = $DB->get_record('course', array('id' => $courseid), '*');
+unset($courseid);
+if (!$course) {
+    redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
+}
 
 $category = $categoryid ? $DB->get_record('question_categories', array('id' => $categoryid)) : null;
 unset($categoryid);
 if (!$category) {
-    redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
-    /*
-    // If no category is given, use the course's default question category
-    $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-    if (!$course) {
-        print_error('categorydoesnotexist', 'question');
-    }
-    $category = $DB->get_record_sql(
-            "SELECT * FROM {question_categories} WHERE contextid = ? ORDER BY id ASC LIMIT 1",
-            array(context_course::instance($course->id)->id)
-    );
+    $category = get_default_qcategory($course);
     if (!$category) {
-        print_error('categorydoesnotexist', 'question');
+        throw new moodle_exception('generalexceptionmessage', 'error', '', 'question category not found');
     }
-    unset($course);
-     */
 }
-unset($courseid);
 $context = context::instance_by_id($category->contextid);
 
 if (!has_capability('moodle/question:add', $context)) {
