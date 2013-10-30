@@ -83,7 +83,7 @@ if ($data) {
         $q->save();
         $ids[] = $q->id;
     }
-    redirect("edit_standard.php?questions=" . join(',', $ids));
+    redirect(new moodle_url("edit_standard.php", array('questions' => join(',', $ids), 'courseid' => $course->id)));
 }
 
 echo $OUTPUT->header();
