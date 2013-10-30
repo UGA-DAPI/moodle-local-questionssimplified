@@ -8,6 +8,7 @@
 
 require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
+require_once __DIR__ . '/locallib.php';
 require_once __DIR__ . '/forms/standard.php';
 
 global $DB, $OUTPUT, $PAGE;
@@ -15,8 +16,24 @@ global $DB, $OUTPUT, $PAGE;
 /* @var $OUTPUT core_renderer */
 /* @var $PAGE moodle_page */
 
-$categoryid = optional_param('category', 0, PARAM_INT);
+$courseid  = optional_param('courseid', $COURSE->id, PARAM_INT);
 $questionsId = optional_param('questions', '', PARAM_SEQUENCE);
+
+$course = $DB->get_record('course', array('id' => $courseid), '*');
+unset($courseid);
+if (!$course) {
+    if (!$questionsId) {
+        throw new moodle_exception('generalexceptionmessage', 'error', '', 'parameter "course" required');
+    } else {
+        redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
+    }
+}
+
+$categories = get_qcategories($course);
+if (!$categories) {
+    die("Error, no question category available for this course.");
+}
+$context = context_course::instance($course->id);
 
 if ($questionsId) {
     $questions = \sqc\Question::findAllById(explode(',', $questionsId));
@@ -25,24 +42,6 @@ if ($questionsId) {
 }
 unset($questionsId);
 
-if ($questions) {
-    $categoryid = $questions[0]->categoryId;
-    $category = $DB->get_record('question_categories', array('id' => $categoryid));
-} else {
-    if (!$categoryid) {
-        redirect(new moodle_url('course_choice.php', array('redirect' => 'standard')));
-    }
-    $category = $DB->get_record('question_categories', array('id' => $categoryid));
-    if (!$category) {
-        print_error('categorydoesnotexist', 'question');
-    }
-}
-unset($categoryid);
-$context = context::instance_by_id($category->contextid);
-
-/**
- * @todo Check permissions
- */
 if (!has_capability('moodle/question:add', $context)) {
     redirect(new moodle_url('course_choice', array('redirect' => 'standard')));
 }
