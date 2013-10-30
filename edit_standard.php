@@ -53,18 +53,18 @@ $PAGE->set_url($url);
 
 $PAGE->set_context($context);
 $PAGE->set_title(get_string('standardEdit', 'local_questionssimplified'));
-$PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' - ' . $category->name);
+$PAGE->set_heading(get_string('standardEdit', 'local_questionssimplified') . ' - ' . $course->shortname);
 
-$form = new questionssimplified_standard_form(null, array('category' => $category, 'questions' => $questions));
+$form = new questionssimplified_standard_form(null, array('categories' => $categories, 'questions' => $questions, 'course' => $course));
 
 $data = $form->get_data();
 if ($data) {
     foreach ($data->question as $line) {
         $question = \sqc\Question::buildFromArray($line);
         if (empty($question->categoryId)) {
-            $question->categoryId = $category->id;
+            print_error('categorydoesnotexist', 'question');
         } else {
-            $qcategory = $DB->get_record('question_categories', array('id' => $question->category));
+            $qcategory = $DB->get_record('question_categories', array('id' => $question->categoryId));
             if (!$qcategory) {
                 print_error('categorydoesnotexist', 'question');
             }

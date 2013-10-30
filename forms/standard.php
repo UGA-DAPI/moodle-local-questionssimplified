@@ -24,11 +24,13 @@ class questionssimplified_standard_form extends moodleform {
         $repeatQuestion = array(
             $mform->createElement('header', 'header-q{no}', get_string('question') . ' {no} {title}'),
             $mform->createElement('hidden', 'question[{no}][id]', 0),
+            $mform->createElement('select', 'question[{no}][category]', get_string('qcategory', 'local_questionssimplified'), $this->_customdata['categories']),
             $mform->createElement('text', 'question[{no}][title]', get_string('questionname', 'question'), array('size'=>'80')),
             $mform->createElement('editor', 'question[{no}][intro]', get_string('description'), array('rows' => 10), array('maxfiles' => 0)),
         );
         $typesQuestion = array(
             "question[{no}][id]" => PARAM_INT,
+            "question[{no}][category]" => PARAM_INT,
             "question[{no}][title]" => PARAM_TEXT,
             "question[{no}][intro]" => PARAM_RAW,
         );
@@ -86,9 +88,8 @@ class questionssimplified_standard_form extends moodleform {
         //-------------------------------------------------------------------------------
         $this->add_action_buttons(false, get_string('submitToQBank', 'local_questionssimplified'));
 
-        $mform->addElement('hidden', 'category');
-        $mform->setType('category', PARAM_INT);
-
+        $this->_form->addElement('hidden', 'courseid', $this->_customdata['course']->id);
+        $this->_form->setType('courseid', PARAM_INT);
         $this->init_values();
     }
 
@@ -101,8 +102,9 @@ class questionssimplified_standard_form extends moodleform {
         if (empty($this->_customdata)) {
             return;
         }
-        if (!empty($this->_customdata['category'])) {
-            $this->_form->setDefault('category', $this->_customdata['category']->id);
+        if (!empty($this->_customdata['categories'])) {
+            $categoriesIds = array_keys($this->_customdata['categories']);
+            $this->_form->setDefault('category', $categoriesIds[0]);
         }
         if (empty($this->_customdata['questions'])) {
             return;
