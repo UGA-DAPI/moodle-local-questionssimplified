@@ -20,3 +20,5 @@ $string['wysiwigtext'] = 'Le titre';
 $string['wysiwigtext_help'] = 'La doc';
 $string['submitToQBank'] = 'Envoyer à la banque de questions';
 $string['qcategory'] = 'Catégorie de question';
+$string['standardinstructions'] = 'Vous pouvez inclure des segments de code LaTeX en les incluant entre des doubles crochets.
+<pre>Calculer [[$\int_0^\pi \cos t dt$]]</pre>';

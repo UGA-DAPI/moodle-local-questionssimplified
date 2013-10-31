@@ -13,3 +13,5 @@ $string['wysiwigtext'] = 'A title';
 $string['wysiwigtext_help'] = 'A help text';
 $string['submitToQBank'] = 'Submit to question bank';
 $string['qcategory'] = 'Question Category';
+$string['standardinstructions'] = 'You may include LaTeX code between doubles brackets.
+<pre>Compute [[$\int_0^\pi \cos t dt$]]</pre>';

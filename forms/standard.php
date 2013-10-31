@@ -14,6 +14,7 @@ class questionssimplified_standard_form extends moodleform {
         $mform = $this->_form;
 
         $mform->addElement('header', 'general', get_string('standardHeader', 'local_questionssimplified'));
+        $mform->addElement('static', '', '', get_string('standardinstructions', 'local_questionssimplified'));
         /**
          * @todo Toggle the advanced settings (feedback+weight per question)
          */
