@@ -16,17 +16,13 @@ global $DB, $OUTPUT, $PAGE;
 /* @var $OUTPUT core_renderer */
 /* @var $PAGE moodle_page */
 
-$courseid  = optional_param('courseid', $COURSE->id, PARAM_INT);
+$courseid  = optional_param('courseid', 0, PARAM_INT);
 $questionsId = optional_param('questions', '', PARAM_SEQUENCE);
 
 $course = $DB->get_record('course', array('id' => $courseid), '*');
 unset($courseid);
 if (!$course) {
-    if (!$questionsId) {
-        throw new moodle_exception('generalexceptionmessage', 'error', '', 'parameter "course" required');
-    } else {
-        redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
-    }
+    redirect(new moodle_url('course_choice.php', array('redirect' => 'standard')));
 }
 
 $categories = get_qcategories($course);
