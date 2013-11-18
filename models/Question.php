@@ -244,6 +244,8 @@ class Question
             );
             $mc->id = $DB->insert_record('question_multichoice', $mc);
         } else {
+            $mc->answers = join(',', $answersIds);
+            $mc->single = ($this->countCorrectAnswers() > 1 ? 0 : 1);
             $DB->update_record('question_multichoice', $mc);
         }
         return true;
