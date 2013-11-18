@@ -39,12 +39,6 @@ $context = context::instance_by_id($category->contextid);
 if (!has_capability('moodle/question:add', $context)) {
     redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
 }
-/**
- * @todo Check permissions
- * has_capability('moodle/question:add', $catcontext);
- * has_capability('moodle/question:editall', $catcontext);
-require_capability();
- */
 
 /**
  * @todo If user has disabled WYSIWYG editor, redirect to edit_standard.php
