@@ -8,14 +8,15 @@ $string['standardHeader'] = 'Écran de vérification et de saisie de questions '
 $string['MCQcreate'] = 'Mes questions';
 $string['courseChoice'] = 'Choix du cours';
 $string['wysiwygIntroTitle'] = 'Consignes';
-$string['wysiwygIntroContent'] = "Cette interface sert à 3 choses : <ul>"
-    . "<li>copier/coller du texte de type Word,</li>"
-    . "<li>le mettre en forme selon les règles :</li> <ul>"
-      . "<li>gras = question,</li>"
-      . "<li>souligné = réponse juste</li>"
-      . "<li>barré = réponse fausse</li>"
-      . "<li>pas de mise en forme : explication</li></ul>"
-	. "<li>faire la saisie directe de nouvelles questions</li></ul>";
+$string['wysiwygIntroContent'] = "Cette interface sert à 2 choses : <ul>"
+	. "<li>faire la saisie directe de nouvelles questions</li>"
+    . "<li>copier/coller du texte de type Word ou compatible.</li></ul>"
+	. "La mise en forme du texte doit respecter les règles suivantes : <ul>"
+    . "<li>mettre en gras TOUTES les questions</li>"
+    . "<li>souligner TOUTES les réponses justes</li>"
+    . "<li>barrer TOUTES les réponses fausses</li>"
+    . "<li>tout texte non mis en forme sera considéré comme un commentaire</li>"
+	. "<li>pensez à retiter TOUTE numérotation des questions ou des réponses</li></ul>";
 $string['wysiwigtext'] = 'Le titre';
 $string['wysiwigtext_help'] = 'La doc';
 $string['submitToQBank'] = 'Envoyer à la banque de questions';
