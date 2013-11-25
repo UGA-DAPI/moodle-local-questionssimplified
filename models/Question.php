@@ -23,7 +23,7 @@ class Question
     public $intro;
 
     /** @var integer */
-    public $introformat;
+    public $introformat = 2;
 
     public $categoryId;
 
@@ -143,7 +143,8 @@ class Question
         } else {
             $q->intro = '<p>' . trim(preg_replace('#<br ?/?>\s*$#s', '', $html)) . '</p>';
         }
-        $q->introformat = 1; // FORMAT_HTML;
+        $q->intro = strip_tags($q->intro);
+        $q->introformat = 2; // FORMAT_PLAIN;
 
         return $q;
     }
@@ -175,8 +176,8 @@ class Question
         $this->id = isset($attr['id']) ? $attr['id'] : null;
         $this->categoryId = isset($attr['category']) ? (int) $attr['category'] : '';
         $this->title = isset($attr['title']) ? $attr['title'] : '';
-        $this->intro = isset($attr['intro']['text']) ? $attr['intro']['text'] : '';
-        $this->introformat = $attr['intro']['format'];
+        $this->intro = isset($attr['intro']['text']) ? $attr['intro']['text'] : (isset($attr['intro']) ? $attr['intro'] : '');
+        $this->introformat = empty($attr['intro']['format']) ? 2 : (int) $attr['intro']['format'];
         if (!empty($attr['answer'])) {
             foreach ($attr['answer'] as $a) {
                 $answer = Answer::buildFromArray($a);
