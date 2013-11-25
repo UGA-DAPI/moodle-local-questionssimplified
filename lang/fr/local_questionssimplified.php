@@ -21,5 +21,10 @@ $string['wysiwigtext'] = 'Le titre';
 $string['wysiwigtext_help'] = 'La doc';
 $string['submitToQBank'] = 'Envoyer à la banque de questions';
 $string['qcategory'] = 'Catégorie de question';
-$string['standardinstructions'] = 'Vous pouvez inclure des segments de code LaTeX en les incluant entre des doubles crochets.
-<pre>Calculer [[$\int_0^\pi \cos t dt$]]</pre>';
+$string['standardinstructions'] = 'Vous pouvez :
+<ul>
+	<li>mettre des éléments en  gras : <code>[*gras*]</code></li>
+	<li>mettre des éléments en italique <code>[_italique_]</code></li>
+	<li>inclure des segments de code LaTeX en les incluant entre des doubles crochets, par exemple : 
+	<pre>[[\LaTeX permet $\int_0^\pi \cos t dt$]]</pre></li>
+</ul>';
