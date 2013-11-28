@@ -87,8 +87,8 @@ class Question
                             $a->content .= $dom->saveXml($node);
                         }
                     }
-                    $strippedContent = trim(strip_tags($a->content));
-                    if ($striptags) {
+                    $strippedContent = trim(strip_tags($a->content), "   \n");
+                    if (strlen($striptags)) {
                         $a->content = $strippedContent;
                     }
                     if ($strippedContent) {
