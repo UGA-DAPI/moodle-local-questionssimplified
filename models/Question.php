@@ -47,7 +47,7 @@ class Question
      * @param string $html
      * @return Question
      */
-    public static function createFromHtml($html)
+    public static function createFromHtml($html, $striptags=true)
     {
         $q = new self;
         $q->answers = array();
@@ -87,7 +87,11 @@ class Question
                             $a->content .= $dom->saveXml($node);
                         }
                     }
-                    if (trim($a->content)) {
+                    $strippedContent = trim(strip_tags($a->content));
+                    if ($striptags) {
+                        $a->content = $strippedContent;
+                    }
+                    if ($strippedContent) {
                         $q->answers[] = $a;
                     }
                     $spansToDelete[] = $span;
@@ -143,7 +147,10 @@ class Question
         } else {
             $q->intro = '<p>' . trim(preg_replace('#<br ?/?>\s*$#s', '', $html)) . '</p>';
         }
-        $q->intro = strip_tags($q->intro);
+        if ($striptags) {
+            $q->title = strip_tags($q->title);
+            $q->intro = strip_tags($q->intro);
+        }
         $q->introformat = 2; // FORMAT_PLAIN;
 
         return $q;
@@ -155,7 +162,7 @@ class Question
      * @param string $html
      * @return Question[]
      */
-    public static function createMultiFromHtml($html)
+    public static function createMultiFromHtml($html, $striptags=true)
     {
         $html = preg_replace('#<p>\s*<(\w+)[^>]*?>\s*<\1>\s*</p>#', '<p></p>', $html);
         $split = preg_split(
@@ -164,7 +171,11 @@ class Question
                 null,
                 PREG_SPLIT_NO_EMPTY
         );
-        return array_map(array('\sqc\Question', 'createFromHtml'), $split);
+        $output = array();
+        foreach ($split as $chunk) {
+            $output[] = self::createFromHtml($chunk, $striptags);
+        }
+        return $output;
     }
 
     /**
