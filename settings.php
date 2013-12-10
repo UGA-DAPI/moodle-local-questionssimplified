@@ -7,7 +7,7 @@
 /* @var $ADMIN admin_root */
 /* @var $settings object */
 
-if ($ADMIN->fulltree) {
+if ($hassiteconfig) { // magic incantation for Moodle
     $s = new admin_setting_confightmleditor(
         'helppage',
         "Page d'aide",
@@ -23,7 +23,7 @@ if ($ADMIN->fulltree) {
         "Cohortes d'enseignants",
         "Le menu sera affiché seulement pour les membres des cohortes dont l'idnumber correspondra à ce motif, appliqué par un SQL LIKE.",
         '',
-        PARAM_RAW
+        PARAM_TEXT
     );
     $s->plugin = 'local_questionssimplified';
     $settings->add($s);
