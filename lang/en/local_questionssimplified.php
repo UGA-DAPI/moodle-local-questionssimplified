@@ -1,11 +1,14 @@
 <?php
 $string['pluginname'] = 'Simplified Questions';
-$string['wysiwygEdit'] = 'Import';
-$string['wysiwygHeader'] = 'Input formated questions';
-$string['questionbank'] = 'Simplified questions bank';
-$string['standardEdit'] = 'Questions form';
-$string['standardHeader'] = 'Input questions and their answers';
+
+// menu My questions
 $string['MCQcreate'] = 'My questions';
+$string['wysiwygEdit'] = 'Import / create';
+$string['standardEdit'] = 'Creation form';
+$string['questionbank'] = 'Questions bank';
+
+$string['wysiwygHeader'] = 'Input formated questions';
+$string['standardHeader'] = 'Input questions and their answers';
 $string['courseChoice'] = 'Course Choice';
 $string['wysiwygIntroTitle'] = 'Intro to WYSIWYG';
 $string['wysiwygIntroContent'] = 'Use wisely';

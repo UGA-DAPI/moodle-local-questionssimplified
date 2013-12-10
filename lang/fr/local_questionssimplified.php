@@ -1,16 +1,19 @@
 <?php
 $string['pluginname'] = 'Questions simplifiées';
-$string['wysiwygEdit'] = 'Import';
 $string['wysiwygHeader'] = 'Saisie des questions formatées';
-$string['questionbank'] = 'Banque de questions simplifiées';
-$string['standardEdit'] = 'Formulaire de questions';
-$string['standardHeader'] = 'Écran de vérification et de saisie de questions ';
+
+// menu Mes questions
 $string['MCQcreate'] = 'Mes questions';
+$string['wysiwygEdit'] = 'Import / création';
+$string['standardEdit'] = 'Création par formulaire';
+$string['questionbank'] = 'Banque de questions';
+
+$string['standardHeader'] = 'Écran de vérification et de saisie de questions ';
 $string['courseChoice'] = 'Choix du cours';
 $string['wysiwygIntroTitle'] = 'Consignes';
 $string['wysiwygIntroContent'] = "Cette interface sert à 2 choses : <ul>"
 	. "<li>faire la saisie directe de nouvelles questions</li>"
-    . "<li>copier/coller du texte de type Word ou compatible.</li></ul>"
+    . "<li>importer du texte de type Word ou compatible avec le bouton <i>Coller un texte créé sous Word</i>.</li></ul>"
 	. "La mise en forme du texte doit respecter les règles suivantes : <ul>"
     . "<li>mettre en gras TOUTES les questions</li>"
     . "<li>souligner TOUTES les réponses justes</li>"
