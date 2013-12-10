@@ -58,11 +58,12 @@ if ( !$system && $courseid == 0 ) { // interactive page for user selection
 	$courses = find_user_courses_as_teacher();
 	echo html_courses_list($courses, $selfurl, $COURSE->id, $redirect);
 
+    /*
 	echo "<ul>";
 	$url = new moodle_url($selfurl, array('system' => 1, 'redirect' => $redirect));
-	// echo "<li>" . html_writer::link($url, "Liste globale (système)") . "</li>";
-	echo "<li>" . "Liste globale (système)" . "</li>"; //** @todo check permission **
+	echo "<li>" . html_writer::link($url, "Liste globale (système)") . "</li>";
 	echo "</ul>";
+     */
 
 	/**
 	 * @todo ajouter : Ajouter un cours || Demander la création d'un cours **
