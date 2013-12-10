@@ -8,14 +8,14 @@
 
 require __DIR__ . '/models/Question.php';
 require __DIR__ . '/models/Answer.php';
+require __DIR__ . '/locallib.php';
 
 
 // doc https://moodle.org/mod/forum/discuss.php?d=170325#yui_3_7_3_2_1359043225921_310
 
 function local_questionssimplified_extends_navigation(global_navigation $navigation) {
-    $permission = TRUE;
-
-    if ($permission) {
+    global $USER;
+    if (questionssimplified_is_teacher($USER)) {
         $node1 = $navigation->add(get_string('MCQcreate', 'local_questionssimplified'));
         $node1->add(
 			get_string('wysiwygEdit', 'local_questionssimplified'),

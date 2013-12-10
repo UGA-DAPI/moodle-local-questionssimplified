@@ -17,4 +17,14 @@ if ($ADMIN->fulltree) {
     );
     $s->plugin = 'local_questionssimplified';
     $settings->add($s);
+
+    $s = new admin_setting_configtext(
+        'cohortpattern',
+        "Cohortes d'enseignants",
+        "Le menu sera affiché seulement pour les membres des cohortes dont l'idnumber correspondra à ce motif, appliqué par un SQL LIKE.",
+        '',
+        PARAM_RAW
+    );
+    $s->plugin = 'local_questionssimplified';
+    $settings->add($s);
 }

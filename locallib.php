@@ -60,3 +60,24 @@ function get_qcategories($course) {
             array(context_course::instance($course->id)->id)
     );
 }
+
+function questionssimplified_is_teacher($user) {
+    global $DB, $COURSE;
+    if (isset($COURSE->id)) {
+        $context = context_course::instance($COURSE->id);
+    } else {
+        $context = context_system::instance();
+    }
+    if (has_capability('moodle/question:add', $context, $user)) {
+        return true;
+    }
+    $pattern = get_config('local_questionssimplified', 'cohortpattern');
+    if (!$pattern) {
+        return false;
+    }
+    return $DB->record_exists_sql(
+            "SELECT 1 FROM cohort_members cm JOIN cohort c ON cm.cohortid = c.id "
+            . "WHERE cm.userid = ? AND c.idnumber LIKE ?",
+            array($user->id, $pattern)
+    );
+}
