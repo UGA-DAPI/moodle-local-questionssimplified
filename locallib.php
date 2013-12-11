@@ -76,7 +76,7 @@ function questionssimplified_is_teacher($user) {
         return false;
     }
     return $DB->record_exists_sql(
-            "SELECT 1 FROM cohort_members cm JOIN cohort c ON cm.cohortid = c.id "
+            "SELECT 1 FROM {cohort_members} cm JOIN {cohort} c ON cm.cohortid = c.id "
             . "WHERE cm.userid = ? AND c.idnumber LIKE ?",
             array($user->id, $pattern)
     );
