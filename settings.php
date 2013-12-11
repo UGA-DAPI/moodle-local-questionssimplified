@@ -24,7 +24,7 @@ if ($hassiteconfig) { // magic incantation for Moodle
     $s = new admin_setting_configtext(
         'cohortpattern',
         "Cohortes d'enseignants",
-        "Le menu sera affiché seulement pour les membres des cohortes dont l'idnumber correspondra à ce motif, appliqué par un SQL LIKE. Exemple '%enseignants%'.",
+        "Le menu sera affiché seulement pour les membres des cohortes dont l'idnumber correspondra à ce motif, appliqué par un SQL LIKE. Exemple : <code>%enseignants%</code>",
         '',
         PARAM_TEXT
     );
