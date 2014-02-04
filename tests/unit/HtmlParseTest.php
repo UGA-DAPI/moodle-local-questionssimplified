@@ -159,6 +159,16 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
                 <p><span style="text-decoration: underline;"><span style="font-size: medium;" size="3"><span style="font-family: Times New Roman;" face="Times New Roman">Correct2</span></span></span></p>
                 <p><span style="text-decoration: underline;"><span style="font-family: Times New Roman; font-size: medium;" size="3" face="Times New Roman"> </span></span></p>'
             ),
+            array( // Mantis #2053 (import Word)
+                '<p align="JUSTIFY"><b><span face="Comic Sans MS, serif" style="font-family: \'Comic Sans MS\', serif;">Question</span></b></p>
+                <p align="JUSTIFY"></p>
+                <p align="JUSTIFY">Baratin<br />long</p>
+                <p align="JUSTIFY"></p>
+                <p align="JUSTIFY"><span style="text-decoration: line-through;"><span face="Comic Sans MS, serif" style="font-family: \'Comic Sans MS\', serif;">Incorrect</span></span></p>
+                <p><span style="text-decoration: underline;"><span style="font-size: medium;" size="3"><span style="font-family: Times New Roman;" face="Times New Roman">Correct1</span></span></span></p>
+                <p><span style="text-decoration: underline;"><span style="font-size: medium;" size="3"><span style="font-family: Times New Roman;" face="Times New Roman">Correct2</span></span></span></p>
+                <p><span style="text-decoration: underline;"><span style="font-family: Times New Roman; font-size: medium;" size="3" face="Times New Roman"> </span></span></p>'
+            ),
         );
     }
 
