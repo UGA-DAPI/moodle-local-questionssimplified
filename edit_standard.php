@@ -10,6 +10,7 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
 require_once __DIR__ . '/locallib.php';
 require_once __DIR__ . '/forms/standard.php';
+require_once $CFG->libdir . '/questionlib.php';
 
 global $DB, $OUTPUT, $PAGE;
 /* @var $DB moodle_database */
@@ -27,7 +28,8 @@ if (!$course) {
 
 $categories = get_qcategories($course);
 if (!$categories) {
-    die("Error, no question category available for this course.");
+    $ccontext = context_course::instance($course->id);
+    $categories = question_make_default_categories(array($ccontext));
 }
 $context = context_course::instance($course->id);
 

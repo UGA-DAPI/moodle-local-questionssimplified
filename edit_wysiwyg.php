@@ -10,6 +10,7 @@ require_once __DIR__ . '/../../config.php';
 require_once __DIR__ . '/lib.php';
 require_once __DIR__ . '/locallib.php';
 require_once __DIR__ . '/forms/wysiwyg.php';
+require_once $CFG->libdir . '/questionlib.php';
 
 global $DB, $COURSE, $OUTPUT, $PAGE;
 
@@ -31,7 +32,8 @@ unset($categoryid);
 if (!$category) {
     $category = get_default_qcategory($course);
     if (!$category) {
-        throw new moodle_exception('generalexceptionmessage', 'error', '', 'question category not found');
+        $ccontext = context_course::instance($course->id);
+        $category = question_make_default_categories(array($ccontext));
     }
 }
 $context = context::instance_by_id($category->contextid);
