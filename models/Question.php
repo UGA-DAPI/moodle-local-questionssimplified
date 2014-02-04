@@ -52,8 +52,9 @@ class Question
         $q = new self;
         $q->answers = array();
         $html = self::cleanupHtml($html);
-
-        // questions are identified with DOM and removed from the HTML
+    $html = preg_replace("#<([^>]*)(class|lang|align|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>#i","<\\1>",$html);
+    $html = preg_replace("#<([^>]*)(class|lang|align|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>#i","<\\1>",$html);
+// questions are identified with DOM and removed from the HTML
         $dom = new \DOMDocument();
         $dom->loadHTML('<div>' . $html . '</div>');
         if (is_a($dom->firstChild, 'DOMDocumentType')) {
