@@ -113,24 +113,24 @@ class Question
 
         // DOM isn't suitable for title and intro, so regexp are used
         foreach (array('strong', 'b') as $btag) {
-            if (empty($q->title) && preg_match('#^\s*<p>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*</p>#i', $html, $m)) {
+            if (empty($q->title) && preg_match('#^\s*<p[^>]*>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*</p>#i', $html, $m)) {
                 $strong = $m[1];
-                if (stripos($strong, '<p>') === false) {
+                if (stripos($strong, '<p>') === false && stripos($strong, '<p ') === false) {
                     if (stripos($strong, '<br') === false) {
                         $q->title = $strong;
-                        $html = preg_replace('#^\s*<p>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*</p>#', '', $html);
+                        $html = preg_replace('#^\s*<p[^>]*>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*</p>#', '', $html);
                     } else {
                         preg_match('#^(.+?)<br ?/?>(.+)$#', $strong, $m);
                         $q->title = preg_replace('#</' . $btag .'>\s*$#i', '', $m[1]);
-                        $html = preg_replace('#^\s*<p>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*<br ?/?>#', '<p>', $html);
+                        $html = preg_replace('#^\s*<p[^>]*>\s*<' . $btag .'>(.+?)</' . $btag .'>\s*<br ?/?>#', '<p>', $html);
                     }
                 }
             }
             if (empty($q->title)) {
-                if (preg_match('#^\s*<p>\s*<' . $btag . '>(.+?)</' . $btag .'>\s*<br ?/?>#i', $html, $m)) {
+                if (preg_match('#^\s*<p[^>]*>\s*<' . $btag . '>(.+?)</' . $btag .'>\s*<br ?/?>#i', $html, $m)) {
                     $q->title = $m[1];
                     $html = str_replace($m[0], '<p>', $html);
-                } else if (preg_match('#^\s*<p>\s*<' . $btag .'>(.+?)<br ?/?>\s*</' . $btag .'>#i', $html, $m)) {
+                } else if (preg_match('#^\s*<p[^>]*>\s*<' . $btag .'>(.+?)<br ?/?>\s*</' . $btag .'>#i', $html, $m)) {
                     $q->title = $m[1];
                     $html = str_replace($m[0], '<p>', $html);
                 }
@@ -140,7 +140,7 @@ class Question
             throw new \Exception("Invalid format of HTML");
         }
 
-        if (preg_match('/^\s*<p>/s', $html)) {
+        if (preg_match('/^\s*<p[^>]*>/s', $html)) {
             $q->intro = trim(preg_replace('#<br ?/?>\s*</p>\s*$#s', '</p>', $html));
         } else if (preg_match('/^\s*$/', $html)) {
             $q->intro = '';
@@ -148,8 +148,8 @@ class Question
             $q->intro = '<p>' . trim(preg_replace('#<br ?/?>\s*$#s', '', $html)) . '</p>';
         }
         if ($striptags) {
-            $q->title = strip_tags($q->title);
-            $q->intro = strip_tags($q->intro);
+            $q->title = trim(strip_tags($q->title));
+            $q->intro = trim(strip_tags($q->intro));
         }
         $q->introformat = 2; // FORMAT_PLAIN;
 
