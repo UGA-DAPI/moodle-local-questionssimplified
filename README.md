@@ -6,6 +6,8 @@ This Moodle module is intended for use with the moodle-mod-automultiplechoice mo
 It provides a simple interface to type multiple-choice questions,
 while the other module handles the paper quizzes built from these questions.
 
+This module was created for the *service TICE de l'Université Pierre-Mendès-France - Grenoble 2, Sciences sociales et humaines*.
+
 
 Installation
 ------------
