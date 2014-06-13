@@ -207,7 +207,7 @@ class Question
      * @return boolean Success?
      */
     public function save() {
-        global $DB, $USER;
+        global $DB, $CFG, $USER;
         $record = $this->convertToDbRecord();
         if (!$record->name) {
             return false;
@@ -242,23 +242,34 @@ class Question
              */
         }
 
-        // save in "question_multichoice"
-        $mc = $DB->get_record('question_multichoice', array('question' => $this->id));
+        // save in "question_multichoice" (<2.6) or "qtype_multichoice_options"
+        if ($CFG->version >= 2013111800) {
+            $qtable = 'qtype_multichoice_options';
+            $qfield = 'questionid';
+        } else {
+            $qtable = 'question_multichoice';
+            $qfield = 'question';
+        }
+        $mc = $DB->get_record($qtable, array($qfield => $this->id));
         if (!$mc) {
             $mc = (object) array(
                 'id' => null,
-                'question' => $this->id,
-                'answers' => join(',', $answersIds),
+                $qfield => $this->id,
                 'correctfeedback' => '',
                 'partiallycorrectfeedback' => '',
                 'incorrectfeedback' => '',
                 'single' => ($this->countCorrectAnswers() > 1 ? 0 : 1),
             );
-            $mc->id = $DB->insert_record('question_multichoice', $mc);
+            if ($qtable == 'question_multichoice') {
+                $mc[answers] = join(',', $answersIds);
+            }
+            $mc->id = $DB->insert_record($qtable, $mc);
         } else {
-            $mc->answers = join(',', $answersIds);
+            if ($qtable == 'question_multichoice') {
+                $mc->answers = join(',', $answersIds);
+            }
             $mc->single = ($this->countCorrectAnswers() > 1 ? 0 : 1);
-            $DB->update_record('question_multichoice', $mc);
+            $DB->update_record($qtable, $mc);
         }
         return true;
     }
