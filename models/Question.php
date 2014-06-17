@@ -32,13 +32,14 @@ class Question
 
     protected static function cleanupHtml($html)
     {
-        return trim(
-                preg_replace('#<strong><br ?/?></strong>#i', '<br />',
-                    preg_replace('#<span[^>]*><br ?/?></span>#i', '<br />',
-                        mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8')
-                    )
-                )
-        );
+    $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+    $html = preg_replace('#<span[^>]*><br ?/?></span>#i', '<br />',$html);
+    $html = preg_replace('#<strong><br ?/?></strong>#i', '<br />',$html);
+    $html = preg_replace("#<([^>]*)(class|lang|align|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>#i","<\\1>",$html);
+    $html = preg_replace("#<([^>]*)(class|lang|align|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>#i","<\\1>",$html);
+ var_dump($html);
+    return trim($html) ;
+
     }
 
     /**
@@ -52,8 +53,6 @@ class Question
         $q = new self;
         $q->answers = array();
         $html = self::cleanupHtml($html);
-    $html = preg_replace("#<([^>]*)(class|lang|align|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>#i","<\\1>",$html);
-    $html = preg_replace("#<([^>]*)(class|lang|align|size|face)=(\"[^\"]*\"|'[^']*'|[^>]+)([^>]*)>#i","<\\1>",$html);
 // questions are identified with DOM and removed from the HTML
         $dom = new \DOMDocument();
         $dom->loadHTML('<div>' . $html . '</div>');
