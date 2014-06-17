@@ -172,7 +172,10 @@ class Question
                 null,
                 PREG_SPLIT_NO_EMPTY
         );
-        $output = array();
+	if ($split[0]=='<p></p>'){
+		array_shift($split);
+	}
+	$output = array();
         foreach ($split as $chunk) {
             $output[] = self::createFromHtml($chunk, $striptags);
         }
