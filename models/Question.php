@@ -108,8 +108,8 @@ class Question
             $html .= $dom->saveXml($node);
         }
         $html = str_replace(array("\n", "<p/>", '<strong/>', '<span/>', '&#13;'), array(' ', '', '', '', ''), $html);
-        $html = preg_replace('#<p>\s*</p>\s*#', '', $html);
-        $html = preg_replace('#<p>\s*<br ?/?>\s*</p>\s*#', '', $html);
+        $html = preg_replace('#<p[^>]*>\s*</p>\s*#', '', $html);
+        $html = preg_replace('#<p[^>]*>\s*<br ?/?>\s*</p>\s*#', '', $html);
 
         // DOM isn't suitable for title and intro, so regexp are used
         foreach (array('strong', 'b') as $btag) {

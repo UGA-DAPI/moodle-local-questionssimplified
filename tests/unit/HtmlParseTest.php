@@ -13,7 +13,7 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\sqc\Question', $q);
         $this->assertEquals("Question", $q->title);
-        $this->assertEquals("", $q->intro);
+        $this->assertEquals("", $q->intro, "Intro should be empty.");
 
         $this->assertCount(2, $q->answers, "Wrong nomber of answers: " . print_r($q->answers, true));
         $this->assertEquals(false, $q->answers[0]->correct);
@@ -43,6 +43,13 @@ class HtmlParseTest extends PHPUnit_Framework_TestCase
                 '<p><b>Question</b></p>
                  <p><span style="text-decoration: line-through;">Incorrect</span></p>
                  <p><span style="text-decoration: underline;">Correct</span></p>'
+            ),
+            array(
+                '<p></p>
+                 <p class="something" lang="fr"><strong>Question</strong></p>
+                 <p class="something" lang="fr">
+                 <span class="something" lang="fr" style="text-decoration: line-through;">Incorrect</span><br />
+                 <span size="+1" style="text-decoration: underline;">Correct</span></p>'
             ),
         );
     }
