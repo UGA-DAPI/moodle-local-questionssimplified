@@ -21,13 +21,12 @@ global $DB, $COURSE, $OUTPUT, $PAGE;
 $categoryid = optional_param('category', 0, PARAM_INT);
 $courseid  = optional_param('courseid', 0, PARAM_INT);
 
-// var_dump($COURSE); die('edit_wysiwyg');
-
 $course = $DB->get_record('course', array('id' => $courseid), '*');
 unset($courseid);
 if (!$course) {
     redirect(new moodle_url('course_choice.php', array('redirect' => 'wysiwyg')));
 }
+$PAGE->set_course($course);
 
 $category = $categoryid ? $DB->get_record('question_categories', array('id' => $categoryid)) : null;
 unset($categoryid);

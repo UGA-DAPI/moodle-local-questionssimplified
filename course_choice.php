@@ -28,12 +28,10 @@ if ( ! isset($redirections[$redirect]) ) {
 	throw new coding_exception("$redirect : redirection invalide.");
 }
 
-//var_dump($COURSE); die('course_choice.php');
-
 if (isset($COURSE->id)) {
-	$context = context_course::instance($COURSE->id);
+    $context = context_course::instance($COURSE->id);
 } else {
-	$context = context_system::instance();
+    $context = context_system::instance();
 }
 
 $selfurl = '/local/questionssimplified/course_choice.php';

@@ -17,26 +17,25 @@ function local_questionssimplified_extends_navigation(global_navigation $navigat
     global $USER, $COURSE;
     if (questionssimplified_is_teacher($USER)) {
         $node1 = $navigation->add(get_string('MCQcreate', 'local_questionssimplified'));
-		if (isset($COURSE) && $COURSE->id > 1) {
-			$urlcomp = array('courseid' => $COURSE->id);
-		} else {
-			$urlcomp = array();
-		}
+        if (isset($COURSE) && $COURSE->id > 1) {
+            $urlparams = array('courseid' => $COURSE->id);
+        } else {
+            $urlparams = array();
+        }
         $node1->add(
-			get_string('wysiwygEdit', 'local_questionssimplified'),
-			new moodle_url('/local/questionssimplified/edit_wysiwyg.php', $urlcomp)
-		);
+                get_string('wysiwygEdit', 'local_questionssimplified'),
+                new moodle_url('/local/questionssimplified/edit_wysiwyg.php', $urlparams)
+        );
         $node1->add(
-			get_string('standardEdit', 'local_questionssimplified'),
-			new moodle_url('/local/questionssimplified/edit_standard.php', $urlcomp)
-		);
-		$node1->add(
-			get_string('questionbank', 'local_questionssimplified'),  // get_string('questionbank', 'question'),
-			new moodle_url('/local/questionssimplified/course_choice.php', array('redirect'=>'bank'))
-		);
-		$node1->add(
-			get_string('help'),
-			new moodle_url('/local/questionssimplified/help.php')
-		);
-	}
+                get_string('standardEdit', 'local_questionssimplified'),
+                new moodle_url('/local/questionssimplified/edit_standard.php', $urlparams)
+        );
+        $node1->add(
+                get_string('questionbank', 'local_questionssimplified'), // get_string('questionbank', 'question'),
+                new moodle_url('/local/questionssimplified/course_choice.php', array('redirect' => 'bank'))
+        );
+        $node1->add(
+                get_string('help'), new moodle_url('/local/questionssimplified/help.php')
+        );
+    }
 }

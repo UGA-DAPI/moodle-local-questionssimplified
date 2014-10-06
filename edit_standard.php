@@ -25,6 +25,7 @@ unset($courseid);
 if (!$course) {
     redirect(new moodle_url('course_choice.php', array('redirect' => 'standard')));
 }
+$PAGE->set_course($course);
 
 $categories = get_qcategories($course);
 if (!$categories) {
