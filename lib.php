@@ -14,16 +14,21 @@ require_once __DIR__ . '/locallib.php';
 // doc https://moodle.org/mod/forum/discuss.php?d=170325#yui_3_7_3_2_1359043225921_310
 
 function local_questionssimplified_extends_navigation(global_navigation $navigation) {
-    global $USER;
+    global $USER, $COURSE;
     if (questionssimplified_is_teacher($USER)) {
         $node1 = $navigation->add(get_string('MCQcreate', 'local_questionssimplified'));
+		if (isset($COURSE) && $COURSE->id > 1) {
+			$urlcomp = array('courseid' => $COURSE->id);
+		} else {
+			$urlcomp = array();
+		}
         $node1->add(
 			get_string('wysiwygEdit', 'local_questionssimplified'),
-			new moodle_url('/local/questionssimplified/edit_wysiwyg.php')
+			new moodle_url('/local/questionssimplified/edit_wysiwyg.php', $urlcomp)
 		);
         $node1->add(
 			get_string('standardEdit', 'local_questionssimplified'),
-			new moodle_url('/local/questionssimplified/edit_standard.php')
+			new moodle_url('/local/questionssimplified/edit_standard.php', $urlcomp)
 		);
 		$node1->add(
 			get_string('questionbank', 'local_questionssimplified'),  // get_string('questionbank', 'question'),

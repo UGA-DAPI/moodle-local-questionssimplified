@@ -21,6 +21,8 @@ global $DB, $COURSE, $OUTPUT, $PAGE;
 $categoryid = optional_param('category', 0, PARAM_INT);
 $courseid  = optional_param('courseid', 0, PARAM_INT);
 
+// var_dump($COURSE); die('edit_wysiwyg');
+
 $course = $DB->get_record('course', array('id' => $courseid), '*');
 unset($courseid);
 if (!$course) {
