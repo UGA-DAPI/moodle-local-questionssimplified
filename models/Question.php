@@ -261,7 +261,7 @@ class Question
                 'single' => ($this->countCorrectAnswers() > 1 ? 0 : 1),
             );
             if ($qtable == 'question_multichoice') {
-                $mc[answers] = join(',', $answersIds);
+                $mc->answers = join(',', $answersIds);
             }
             $mc->id = $DB->insert_record($qtable, $mc);
         } else {
