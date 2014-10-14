@@ -150,8 +150,10 @@ class Question
         if ($striptags) {
             $q->title = trim(strip_tags($q->title));
             $q->intro = trim(strip_tags($q->intro));
+            $q->introformat = 1; // FORMAT_HTML
+        } else {
+            $q->introformat = 2; // FORMAT_PLAIN;
         }
-        $q->introformat = 2; // FORMAT_PLAIN;
 
         return $q;
     }
