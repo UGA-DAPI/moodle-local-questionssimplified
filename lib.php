@@ -32,7 +32,8 @@ function local_questionssimplified_extends_navigation(global_navigation $navigat
         );
         $node1->add(
                 get_string('questionbank', 'local_questionssimplified'), // get_string('questionbank', 'question'),
-                new moodle_url('/local/questionssimplified/course_choice.php', array('redirect' => 'bank'))
+                new moodle_url('/local/questionssimplified/course_choice.php', 
+                        array('courseid' => $COURSE->id, 'redirect' => 'bank') )
         );
         $node1->add(
                 get_string('help'), new moodle_url('/local/questionssimplified/help.php')

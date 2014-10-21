@@ -31,7 +31,7 @@ function html_courses_list($courses, $baseurl, $currentcourseid, $redirect) {
             $em = '';
             $endem = '';
         }
-		$url = new moodle_url($baseurl, array('course' => $courseid, 'redirect' => $redirect));
+		$url = new moodle_url($baseurl, array('courseid' => $courseid, 'redirect' => $redirect));
         $html .= "<li>" . $em . html_writer::link($url, $name) . $endem . "</li> \n";
     }
     $html .= "</ul>\n";

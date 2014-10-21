@@ -15,7 +15,7 @@ global $COURSE, $OUTPUT, $PAGE;
 /* @var $PAGE moodle_page */
 
 $redirect = required_param('redirect', PARAM_ALPHA);
-$courseid = optional_param('course', 0, PARAM_INT);   // course id (defaults to 0)
+$courseid = optional_param('courseid', 0, PARAM_INT);   // course id (defaults to 0)
 $system = optional_param('system', false, PARAM_BOOL);     // choice = system default category
 
 $redirections = array(
@@ -81,7 +81,7 @@ if ( !$system && $courseid == 0 ) { // interactive page for user selection
 			$qcategory = question_make_default_categories(array($context));
 		}
 		if ($redirect == 'bank') {
-			$urlparams = array('courseid' => 1);
+			$urlparams = array('courseid' => $courseid);
 		} else { //wysiwyg or standard
 			$urlparams = array('category' => $qcategory->id);
 		}
