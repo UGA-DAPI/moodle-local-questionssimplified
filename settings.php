@@ -10,7 +10,7 @@
 if ($hassiteconfig) { // magic incantation for Moodle
     $settings = new admin_settingpage('local_questionssimplified', 'Saisie simplifiée de questions pour QCM');
     $ADMIN->add('localplugins', $settings); // Second magic incantation
-
+/*
     $s = new admin_setting_confightmleditor(
         'helppage',
         "Page d'aide",
@@ -29,5 +29,5 @@ if ($hassiteconfig) { // magic incantation for Moodle
         PARAM_TEXT
     );
     $s->plugin = 'local_questionssimplified';
-    $settings->add($s);
+    $settings->add($s);*/
 }

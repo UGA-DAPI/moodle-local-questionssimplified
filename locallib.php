@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html  GNU GPL v3
  */
 /* @var $DB moodle_database */
-
+/*
 function find_user_courses_as_teacher() {
     global $DB, $USER;
 
@@ -37,7 +37,7 @@ function html_courses_list($courses, $baseurl, $currentcourseid, $redirect) {
     $html .= "</ul>\n";
     return $html;
 }
-
+*/
 function get_default_qcategory($course) {
     global $DB;
     // If no category is given, use the course's default question category

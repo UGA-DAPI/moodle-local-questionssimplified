@@ -32,8 +32,6 @@ function xmldb_local_questionssimplified_upgrade($oldversion) {
             }
         }
     }
-
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;
 }
-
