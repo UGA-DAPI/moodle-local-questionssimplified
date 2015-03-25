@@ -260,7 +260,7 @@ class Question
                 'correctfeedback' => '',
                 'partiallycorrectfeedback' => '',
                 'incorrectfeedback' => '',
-                'single' => ($this->countCorrectAnswers() == 1 ? 0 : 1),
+                'single' => ($this->countCorrectAnswers() == 1 ? 1 : 0),
             );
             if ($qtable == 'question_multichoice') {
                 $mc->answers = join(',', $answersIds);
@@ -270,7 +270,7 @@ class Question
             if ($qtable == 'question_multichoice') {
                 $mc->answers = join(',', $answersIds);
             }
-            $mc->single = ($this->countCorrectAnswers() == 1 ? 0 : 1);
+            $mc->single = ($this->countCorrectAnswers() == 1 ? 1 : 0);
             $DB->update_record($qtable, $mc);
         }
         return true;
